@@ -1,15 +1,9 @@
 `use strict`;
 
 const db = require("../db");
-// const db = require("../db");
 const firebase = require("firebase");
 
 const firestore = db.firestore();
-
-// module.exports.getAllBuses = async (req, res) => {
-//   console.log("checking from console");
-//   res.send("checking");
-// };
 
 module.exports.check_user = async (req, res) => {
   console.log("checking from console");
@@ -19,23 +13,21 @@ module.exports.check_user = async (req, res) => {
 
 module.exports.signupUser = async (req, res) => {
   console.log("signup");
-  const { email, password, role, username, adminId } = req.body; // Add 'username' to the destructuring
+  const { email, password, role, username, adminId } = req.body;
 
   if (adminId == "ZVbVLz0Jwqhmt13yivVHWhILdbN2") {
     try {
-      // Create a new user in Firebase Authentication
       const userCredential = await firebase
         .auth()
         .createUserWithEmailAndPassword(email, password);
       const user = userCredential.user;
 
-      // Save the user details to Firestore
       await firestore.collection("users").doc(user.uid).set({
         email: user.email,
         createdAt: new Date(),
         role: role,
         userId: user.uid,
-        username: username, // Add 'username' to the document
+        username: username,
       });
 
       res.send("User signed up successfully!");
@@ -45,5 +37,34 @@ module.exports.signupUser = async (req, res) => {
     }
   } else {
     res.send("Only Admin can create user");
+  }
+};
+
+module.exports.signinUser = async (req, res) => {
+  console.log("signin");
+  const { email, password } = req.body;
+  const { role } = req.params; // Take role parameter from the route
+
+  try {
+    const userCredential = await firebase
+      .auth()
+      .signInWithEmailAndPassword(email, password);
+    const user = userCredential.user;
+
+    const userData = await firestore.collection("users").doc(user.uid).get();
+    const userDataObj = userData.data();
+
+    const userRole = userDataObj.role; // Get the role value from userDataObj
+
+    if (role == userRole) {
+      res.send("User signed in");
+    } else {
+      res.send(
+        `You are trying to sign in with role ${role}, but your role is ${userRole}`
+      );
+    }
+  } catch (error) {
+    console.error("Error signing in user:", error);
+    res.status(500).send("An error occurred while signing in user.");
   }
 };
