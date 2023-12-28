@@ -40,6 +40,36 @@ module.exports.signupUser = async (req, res) => {
   }
 };
 
+module.exports.createSSC = async (req, res) => {
+  console.log("create SSC");
+  const { email, password, username, adminId } = req.body;
+
+  if (adminId == "ZVbVLz0Jwqhmt13yivVHWhILdbN2") {
+    try {
+      const userCredential = await firebase
+        .auth()
+        .createUserWithEmailAndPassword(email, password);
+      const user = userCredential.user;
+
+      await firestore.collection("SSC").doc(user.uid).set({
+        email: user.email,
+        createdAt: new Date(),
+        role: "SSC",
+        userId: user.uid,
+        username: username,
+        password: password,
+      });
+
+      res.send("User signed up successfully!");
+    } catch (error) {
+      console.error("Error signing up user:", error);
+      res.status(500).send("An error occurred while signing up user.");
+    }
+  } else {
+    res.send("Only Admin can create user");
+  }
+};
+
 module.exports.signinUser = async (req, res) => {
   console.log("signin");
   const { email, password } = req.body;
