@@ -42,7 +42,8 @@ module.exports.signupUser = async (req, res) => {
 
 module.exports.createSSC = async (req, res) => {
   console.log("create SSC");
-  const { email, password, username, adminId } = req.body;
+  const { email, password, username, adminId, Skill_council_name, SSC_code } =
+    req.body;
 
   if (adminId == "ZVbVLz0Jwqhmt13yivVHWhILdbN2") {
     try {
@@ -51,13 +52,14 @@ module.exports.createSSC = async (req, res) => {
         .createUserWithEmailAndPassword(email, password);
       const user = userCredential.user;
 
-      await firestore.collection("SSC").doc(user.uid).set({
+      await firestore.collection("SSC").doc(SSC_code).set({
         email: user.email,
         createdAt: new Date(),
         role: "SSC",
         userId: user.uid,
         username: username,
         password: password,
+        Skill_council_name: Skill_council_name,
       });
 
       res.send("User signed up successfully!");

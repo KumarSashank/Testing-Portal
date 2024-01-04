@@ -13,7 +13,9 @@ const PORT = process.env.PORT || 8000;
 
 // Define your routes after setting up middleware
 const route = require("./routes/user_route");
+const ssc_route = require("./routes/ssc_route");
 app.use(route);
+app.use(ssc_route);
 
 app.listen(PORT, () => {
   console.log(`Listening on : ${PORT}`);
