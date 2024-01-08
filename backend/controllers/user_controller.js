@@ -109,6 +109,7 @@ module.exports.getsectors = async (req, res) => {
     const sscNames = sscSnapshot.docs.map((doc) => doc.id);
 
     const sectors = [];
+    const qps = [];
 
     for (const sscName of sscNames) {
       const qpsSnapshot = await firestore
@@ -118,9 +119,25 @@ module.exports.getsectors = async (req, res) => {
         .get();
       const qpsNames = qpsSnapshot.docs.map((doc) => doc.id);
 
+      for (const qpsName of qpsNames) {
+        const nosSnapshot = await firestore
+          .collection("SSC")
+          .doc(sscName)
+          .collection("QPS")
+          .doc(qpsName)
+          .collection("NOS")
+          .get();
+        const nosNames = nosSnapshot.docs.map((doc) => doc.id);
+        console.log(nosNames);
+
+        qps.push({
+          QPS: qpsName,
+          NOS: nosNames,
+        });
+      }
       sectors.push({
         SSC: sscName,
-        QPS: qpsNames,
+        QPS: qps,
       });
     }
 
