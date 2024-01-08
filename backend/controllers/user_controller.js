@@ -100,3 +100,40 @@ module.exports.signinUser = async (req, res) => {
     res.status(500).send("An error occurred while signing in user.");
   }
 };
+
+module.exports.getsectors = async (req, res) => {
+  console.log("sectors json list");
+
+  try {
+    const sscSnapshot = await firestore.collection("SSC").get();
+    const sscNames = sscSnapshot.docs.map((doc) => doc.id);
+
+    const sectors = [];
+
+    for (const sscName of sscNames) {
+      const qpsSnapshot = await firestore
+        .collection("SSC")
+        .doc(sscName)
+        .collection("QPS")
+        .get();
+      const qpsNames = qpsSnapshot.docs.map((doc) => doc.id);
+
+      sectors.push({
+        SSC: sscName,
+        QPS: qpsNames,
+      });
+    }
+
+    res.json({ sectors });
+  } catch (error) {
+    console.error(
+      "Error retrieving SSC collection names and QPS names:",
+      error
+    );
+    res
+      .status(500)
+      .send(
+        "An error occurred while retrieving SSC collection names and QPS names."
+      );
+  }
+};
