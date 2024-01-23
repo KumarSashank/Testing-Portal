@@ -570,42 +570,147 @@ class _AdminDashboardState extends State<AdminDashboard> {
                             style: GoogleFonts.poppins(textStyle: TextStyle(fontSize: 21, fontWeight: FontWeight.w600, letterSpacing: 0.2, color: Colors.black),
                             ),),
                         SizedBox(height: 10.0,),
-                        Row(
-                          children: [
-                            SizedBox(
-                              width: 214.0,
-                              height: 100.0,
-                              child: Card(
-                                shadowColor: Colors.grey,
-                                surfaceTintColor: Colors.grey,
-                                shape: RoundedRectangleBorder(
-                                  borderRadius: BorderRadius.circular(8.0),
-                                ),
-                                child: Column(
-                                  mainAxisAlignment: MainAxisAlignment.start,
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  children: [
-                                    SizedBox(height: 5.0,),
-                                    Text('  ACTIVE ASSESSORS',
-                                  style: GoogleFonts.poppins(textStyle: TextStyle(fontSize: 16, fontWeight: FontWeight.w500, letterSpacing: 0.32, color: Colors.redAccent),
+                        IntrinsicWidth(
+                          child: Row(
+                            children: [
+                              SizedBox(
+                                width: 284.0,
+                                height: 100.0,
+                                child: Card(
+                                  shadowColor: Colors.grey,
+                                  surfaceTintColor: Colors.grey,
+                                  shape: RoundedRectangleBorder(
+                                    borderRadius: BorderRadius.circular(8.0),
                                   ),
+                                  child: Column(
+                                    mainAxisAlignment: MainAxisAlignment.start,
+                                    crossAxisAlignment: CrossAxisAlignment.start,
+                                    children: [
+                                      SizedBox(height: 5.0,),
+                                      Text('  ACTIVE ASSESSORS',
+                                    style: GoogleFonts.poppins(textStyle: TextStyle(fontSize: 16, fontWeight: FontWeight.w500, letterSpacing: 0.32, color: Colors.redAccent),
                                     ),
-                                    SizedBox(height: 20.0,),
-                                     Row(
-                                       children: [
-                                         //**
-                                         //** Number input** //
-                                         //**
-                                         SizedBox(width: 40.0,),
-                                         Icon(CupertinoIcons.graph_circle, color: Colors.green),
-                                       ],
-                                     ),
-
-                                  ],
+                                      ),
+                                      SizedBox(height: 20.0,),
+                                       Row(
+                                         children: [
+                                           //**
+                                           //** Number input** //
+                                           //**
+                                           SizedBox(width: 220.0,),
+                                           Icon(CupertinoIcons.graph_circle, color: Colors.green),
+                                         ],
+                                       ),
+                          
+                                    ],
+                                  ),
                                 ),
                               ),
-                            ),
-                          ],
+                              SizedBox(width: 30.0,),
+                              SizedBox(
+                                width: 284.0,
+                                height: 100.0,
+                                child: Card(
+                                  shadowColor: Colors.grey,
+                                  surfaceTintColor: Colors.grey,
+                                  shape: RoundedRectangleBorder(
+                                    borderRadius: BorderRadius.circular(8.0),
+                                  ),
+                                  child: Column(
+                                    mainAxisAlignment: MainAxisAlignment.start,
+                                    crossAxisAlignment: CrossAxisAlignment.start,
+                                    children: [
+                                      SizedBox(height: 5.0,),
+                                      Text('  TOTAL BATCHES',
+                                        style: GoogleFonts.poppins(textStyle: TextStyle(fontSize: 16, fontWeight: FontWeight.w500, letterSpacing: 0.3, color: Colors.redAccent),
+                                        ),
+                                      ),
+                                      SizedBox(height: 20.0,),
+                                      Row(
+                                        children: [
+                                          //**
+                                          //** Number input** //
+                                          //**
+                                          SizedBox(width: 220.0,),
+                                          Icon(CupertinoIcons.graph_circle, color: Colors.red),
+                                        ],
+                                      ),
+                          
+                                    ],
+                                  ),
+                                ),
+                              ),
+                              SizedBox(width: 30.0,),
+                              SizedBox(
+                                width: 284.0,
+                                height: 100.0,
+                                child: Card(
+                                  shadowColor: Colors.grey,
+                                  surfaceTintColor: Colors.grey,
+                                  shape: RoundedRectangleBorder(
+                                    borderRadius: BorderRadius.circular(8.0),
+                                  ),
+                                  child: Column(
+                                    mainAxisAlignment: MainAxisAlignment.start,
+                                    crossAxisAlignment: CrossAxisAlignment.start,
+                                    children: [
+                                      SizedBox(height: 5.0,),
+                                      Text('  TOTAL SSC',
+                                        style: GoogleFonts.poppins(textStyle: TextStyle(fontSize: 16, fontWeight: FontWeight.w500, letterSpacing: 0.3, color: Colors.redAccent),
+                                        ),
+                                      ),
+                                      SizedBox(height: 20.0,),
+                                      Row(
+                                        children: [
+                                          //**
+                                          //** Number input** //
+                                          //**
+                                          SizedBox(width: 220.0,),
+                                          Icon(CupertinoIcons.graph_circle, color: Colors.green),
+                          
+                                        ],
+                                      ),
+                          
+                                    ],
+                                  ),
+                                ),
+                              ),
+                              SizedBox(width: 30.0,),
+                              SizedBox(
+                                width: 284.0,
+                                height: 100.0,
+                                child: Card(
+                                  shadowColor: Colors.grey,
+                                  surfaceTintColor: Colors.grey,
+                                  shape: RoundedRectangleBorder(
+                                    borderRadius: BorderRadius.circular(8.0),
+                                  ),
+                                  child: Column(
+                                    mainAxisAlignment: MainAxisAlignment.start,
+                                    crossAxisAlignment: CrossAxisAlignment.start,
+                                    children: [
+                                      SizedBox(height: 5.0,),
+                                      Text('  TOTAL STUDENTS',
+                                        style: GoogleFonts.poppins(textStyle: TextStyle(fontSize: 16, fontWeight: FontWeight.w500, letterSpacing: 0.3, color: Colors.redAccent),
+                                        ),
+                                      ),
+                                      SizedBox(height: 20.0,),
+                                      Row(
+                                        children: [
+                                          //**
+                                          //** Number input** //
+                                          //**
+                                          SizedBox(width: 220.0,),
+                                          Icon(CupertinoIcons.graph_circle, color: Colors.red),
+                                        ],
+                                      ),
+                          
+                                    ],
+                                  ),
+                                ),
+                              ),
+                            ],
+                          ),
                         ),
                       ],
                     )
