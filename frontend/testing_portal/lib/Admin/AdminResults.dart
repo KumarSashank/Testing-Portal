@@ -740,6 +740,76 @@ class _AdminResultsState extends State<AdminResults> {
                 ],
               ),
             ),
+            Expanded(
+              child: Container(
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.start,
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    SizedBox(height: 20.0,),
+                    IntrinsicHeight(
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.start,
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text(
+                              'Welcome ADMIN,',
+                              style: GoogleFonts.poppins(textStyle: TextStyle(fontSize: 24, fontWeight: FontWeight.w600, letterSpacing: 0.5, color: Colors.black),
+                              )),
+                          SizedBox(width: 280.0,),
+                          SizedBox(
+                              width: 520.0,
+                              height: 50.0,
+                              child: Padding(
+                                padding: const EdgeInsets.all(4.0),
+                                child: SearchAnchor(
+                                  builder: (BuildContext context, SearchController controller) {
+                                    return SearchBar(
+                                      controller: controller,
+                                      shape: MaterialStatePropertyAll<RoundedRectangleBorder>(
+                                          RoundedRectangleBorder(borderRadius: BorderRadius.zero)),
+                                      shadowColor: MaterialStatePropertyAll(Colors.white),
+                                      backgroundColor: MaterialStatePropertyAll(Colors.white),
+                                      onTap: () {
+                                        controller.openView();
+                                      },
+                                      onChanged: (_) {
+                                        controller.openView();
+                                      },
+                                      leading: const Icon(Icons.search),
+                                      hintText: 'Search',
+                                    );
+                                  }, suggestionsBuilder: (BuildContext context, SearchController controller)
+                                {return List<ListTile>.generate(1, (int index) {
+                                  final String item = 'course ';
+                                  return ListTile(
+                                    title: Text(item),
+                                    onTap: () {
+                                      setState(() {
+                                        controller.closeView(item);
+                                      }
+                                      );
+                                    },
+                                  );
+                                }
+                                );
+                                },
+                                ),
+                              )
+                          ),
+                          SizedBox(width: 25.0,),
+                          IconButton(onPressed: () {}, icon: Icon(CupertinoIcons.bell, color: Colors.black, size: 30.0,),),
+                          SizedBox(width: 25.0,),
+                          IconButton(onPressed: () {}, icon: Icon(CupertinoIcons.gear_big, color: Colors.black, size: 30.0,),),
+                          SizedBox(width: 25.0,),
+                          IconButton(onPressed: () {}, icon: Icon(CupertinoIcons.person_circle, color: Colors.redAccent, size: 30.0,),)
+                        ],
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+            ),
 
 
           ],
