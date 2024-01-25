@@ -712,6 +712,85 @@ class _AdminDashboardState extends State<AdminDashboard> {
                             ],
                           ),
                         ),
+                        SizedBox(height: 15.0,),
+                        Row(
+                          children: [
+                            SizedBox(
+                              width: 600.0,
+                              height: 400.0,
+                              child: Card(
+                                shadowColor: Colors.grey,
+                                surfaceTintColor: Colors.grey,
+                                shape: RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(8.0),
+                                ),
+                                child: Column(
+                                  mainAxisAlignment: MainAxisAlignment.start,
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                  SizedBox(height: 5.0,),
+                                  Center(
+                                    child: Text(' Monthly Assessments Count',
+                                      style: GoogleFonts.poppins(textStyle: TextStyle(fontSize: 22, fontWeight: FontWeight.w600, letterSpacing: 0.4, color: Colors.black),
+                                      ),
+                                    ),
+                                  ),
+                                  ],
+                              ),
+                              ),
+                            ),
+                            SizedBox(width: 30.0,),
+                            SizedBox(
+                              width: 600.0,
+                              height: 400.0,
+                              child: Card(
+                                shadowColor: Colors.grey,
+                                surfaceTintColor: Colors.grey,
+                                shape: RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(8.0),
+                                ),
+                                child: Column(
+                                  mainAxisAlignment: MainAxisAlignment.start,
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    SizedBox(height: 5.0,),
+                                    Center(
+                                      child: Text('Daily Assessments Count',
+                                        style: GoogleFonts.poppins(textStyle: TextStyle(fontSize: 22, fontWeight: FontWeight.w600, letterSpacing: 0.4, color: Colors.black),
+                                        ),
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                              ),
+                            )
+                          ],
+                        ),
+                        SizedBox(height: 15.0,),
+                        SizedBox(
+                          width: 600.0,
+                          height: 100.0,
+                          child: Card(
+                            shadowColor: Colors.grey,
+                            surfaceTintColor: Colors.grey,
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(8.0),
+                            ),
+                            child: Column(
+                              mainAxisAlignment: MainAxisAlignment.start,
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                SizedBox(height: 5.0,),
+                                Center(
+                                  child: Text('Upcoming Assessments',
+                                    style: GoogleFonts.poppins(textStyle: TextStyle(fontSize: 22, fontWeight: FontWeight.w600, letterSpacing: 0.4, color: Colors.black),
+                                    ),
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ),
+                        )
                       ],
                     )
 
