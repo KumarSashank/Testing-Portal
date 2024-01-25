@@ -1,7 +1,20 @@
+import 'package:testing_portal/Admin/AdminAnalysis.dart';
+import 'package:testing_portal/Admin/AdminAssessments.dart';
+import 'package:testing_portal/Admin/AdminAssessors.dart';
+import 'package:testing_portal/Admin/AdminBatches.dart';
+import 'package:testing_portal/Admin/AdminMasters.dart';
+import 'package:testing_portal/Admin/AdminQPsNos.dart';
+import 'package:testing_portal/Admin/AdminQuestionPapers.dart';
+import 'package:testing_portal/Admin/AdminQuestions.dart';
+import 'package:testing_portal/Admin/AdminReports.dart';
+import 'package:testing_portal/Admin/AdminResults.dart';
+import 'package:testing_portal/Admin/AdminSectorSkillCouncils.dart';
+import 'package:testing_portal/Admin/AdminTrainingCenters.dart';
 import 'package:testing_portal/main.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:testing_portal/Admin/AdminCalendar.dart';
 
 class AdminDashboard extends StatefulWidget {
   const AdminDashboard({Key? key}) : super(key: key);
@@ -58,7 +71,12 @@ class _AdminDashboardState extends State<AdminDashboard> {
                                     });
                                   },
                                   child: TextButton(
-                                        onPressed: () {},
+                                        onPressed: () {
+                                          Navigator.push(
+                                            context,
+                                            MaterialPageRoute(builder: (context) =>  AdminDashboard()),
+                                          );
+                                        },
                                         style:
                                             ButtonStyle(shape: MaterialStateProperty.all<RoundedRectangleBorder>(RoundedRectangleBorder(borderRadius: BorderRadius.zero)),
                                             backgroundColor:hover == true ? MaterialStateProperty.all(Colors.white70.withOpacity(0.2)) : MaterialStateProperty.all(Colors.redAccent.withOpacity(0.4))),
@@ -93,7 +111,12 @@ class _AdminDashboardState extends State<AdminDashboard> {
                                     });
                                     },
                                   child: TextButton(
-                                    onPressed: () {},
+                                    onPressed: () {
+                                      Navigator.push(
+                                        context,
+                                        MaterialPageRoute(builder: (context) =>  AdminCalendar()),
+                                      );
+                                    },
                                     style:
                                     ButtonStyle(shape: MaterialStateProperty.all<RoundedRectangleBorder>(RoundedRectangleBorder(borderRadius: BorderRadius.zero)),
                                         backgroundColor:MaterialStateProperty.all(Colors.white70.withOpacity(0.2))),
@@ -126,7 +149,12 @@ class _AdminDashboardState extends State<AdminDashboard> {
                                     });
                                   },
                                   child: TextButton(
-                                    onPressed: () {},
+                                    onPressed: () {
+                                      Navigator.push(
+                                        context,
+                                        MaterialPageRoute(builder: (context) =>  AdminSectorSkillCouncils()),
+                                      );
+                                    },
                                     style:
                                     ButtonStyle(shape: MaterialStateProperty.all<RoundedRectangleBorder>(RoundedRectangleBorder(borderRadius: BorderRadius.zero)),
                                         backgroundColor:MaterialStateProperty.all(Colors.white70.withOpacity(0.2))),
@@ -157,7 +185,12 @@ class _AdminDashboardState extends State<AdminDashboard> {
                                },
                           
                                child: TextButton(
-                                    onPressed: () {},
+                                    onPressed: () {
+                                      Navigator.push(
+                                        context,
+                                        MaterialPageRoute(builder: (context) =>  AdminQPsNos()),
+                                      );
+                                    },
                                  style:
                                  ButtonStyle(shape: MaterialStateProperty.all<RoundedRectangleBorder>(RoundedRectangleBorder(borderRadius: BorderRadius.zero)),
                                    backgroundColor:MaterialStateProperty.all(Colors.white70.withOpacity(0.2))),
@@ -190,7 +223,12 @@ class _AdminDashboardState extends State<AdminDashboard> {
                                   });
                                 },
                                 child: TextButton(
-                                    onPressed: () {},
+                                    onPressed: () {
+                                      Navigator.push(
+                                        context,
+                                        MaterialPageRoute(builder: (context) =>  AdminAssessors()),
+                                      );
+                                    },
                                   style:
                                   ButtonStyle(shape: MaterialStateProperty.all<RoundedRectangleBorder>(RoundedRectangleBorder(borderRadius: BorderRadius.zero)),
                                       backgroundColor:MaterialStateProperty.all(Colors.white70.withOpacity(0.2))),
@@ -223,7 +261,12 @@ class _AdminDashboardState extends State<AdminDashboard> {
                                   });
                                 },
                                 child: TextButton(
-                                    onPressed: () {},
+                                    onPressed: () {
+                                      Navigator.push(
+                                        context,
+                                        MaterialPageRoute(builder: (context) =>  AdminBatches()),
+                                      );
+                                    },
                                   style:
                                   ButtonStyle(shape: MaterialStateProperty.all<RoundedRectangleBorder>(RoundedRectangleBorder(borderRadius: BorderRadius.zero)),
                                       backgroundColor:MaterialStateProperty.all(Colors.white70.withOpacity(0.2))),
@@ -256,7 +299,12 @@ class _AdminDashboardState extends State<AdminDashboard> {
                                   });
                                 },
                                 child: TextButton(
-                                    onPressed: () {},
+                                    onPressed: () {
+                                      Navigator.push(
+                                        context,
+                                        MaterialPageRoute(builder: (context) =>  AdminAssessments()),
+                                      );
+                                    },
                                   style:
                                   ButtonStyle(shape: MaterialStateProperty.all<RoundedRectangleBorder>(RoundedRectangleBorder(borderRadius: BorderRadius.zero)),
                                       backgroundColor:MaterialStateProperty.all(Colors.white70.withOpacity(0.2))),
@@ -276,7 +324,12 @@ class _AdminDashboardState extends State<AdminDashboard> {
                               ),
                               SizedBox(height: 3.0,),
                               TextButton(
-                                  onPressed: () {},
+                                  onPressed: () {
+                                    Navigator.push(
+                                      context,
+                                      MaterialPageRoute(builder: (context) =>  AdminTrainingCenters()),
+                                    );
+                                  },
                                   style:
                                   ButtonStyle(shape: MaterialStateProperty.all<RoundedRectangleBorder>(RoundedRectangleBorder(borderRadius: BorderRadius.zero)),
                                       backgroundColor:MaterialStateProperty.all(Colors.white70.withOpacity(0.2))),
@@ -298,7 +351,12 @@ class _AdminDashboardState extends State<AdminDashboard> {
                           
                               SizedBox(height: 3.0,),
                               TextButton(
-                                  onPressed: () {},
+                                  onPressed: () {
+                                    Navigator.push(
+                                      context,
+                                      MaterialPageRoute(builder: (context) =>  AdminResults()),
+                                    );
+                                  },
                                   style:
                                   ButtonStyle(shape: MaterialStateProperty.all<RoundedRectangleBorder>(RoundedRectangleBorder(borderRadius: BorderRadius.zero)),
                                       backgroundColor:MaterialStateProperty.all(Colors.white70.withOpacity(0.2))),
@@ -321,7 +379,12 @@ class _AdminDashboardState extends State<AdminDashboard> {
                           
                               SizedBox(height: 3.0,),
                                TextButton(
-                                  onPressed: () {},
+                                  onPressed: () {
+                                    Navigator.push(
+                                      context,
+                                      MaterialPageRoute(builder: (context) =>  AdminQuestions()),
+                                    );
+                                  },
                                   style:
                                   ButtonStyle(shape: MaterialStateProperty.all<RoundedRectangleBorder>(RoundedRectangleBorder(borderRadius: BorderRadius.zero)),
                                       backgroundColor:MaterialStateProperty.all(Colors.white70.withOpacity(0.2))),
@@ -344,7 +407,12 @@ class _AdminDashboardState extends State<AdminDashboard> {
                           
                               SizedBox(height: 3.0,),
                               TextButton(
-                                  onPressed: () {},
+                                  onPressed: () {
+                                    Navigator.push(
+                                      context,
+                                      MaterialPageRoute(builder: (context) =>  AdminQuestionPapers()),
+                                    );
+                                  },
                                 style:
                                 ButtonStyle(shape: MaterialStateProperty.all<RoundedRectangleBorder>(RoundedRectangleBorder(borderRadius: BorderRadius.zero)),
                                     backgroundColor:MaterialStateProperty.all(Colors.white70.withOpacity(0.2))),
@@ -367,7 +435,12 @@ class _AdminDashboardState extends State<AdminDashboard> {
                           
                               SizedBox(height: 3.0,),
                               TextButton(
-                                  onPressed: () {},
+                                  onPressed: () {
+                                    Navigator.push(
+                                      context,
+                                      MaterialPageRoute(builder: (context) =>  AdminAnalysis()),
+                                    );
+                                  },
                                 style:
                                 ButtonStyle(shape: MaterialStateProperty.all<RoundedRectangleBorder>(RoundedRectangleBorder(borderRadius: BorderRadius.zero)),
                                     backgroundColor:MaterialStateProperty.all(Colors.white70.withOpacity(0.2))),
@@ -390,7 +463,12 @@ class _AdminDashboardState extends State<AdminDashboard> {
                           
                               SizedBox(height: 3.0,),
                               TextButton(
-                                  onPressed: () {},
+                                  onPressed: () {
+                                    Navigator.push(
+                                      context,
+                                      MaterialPageRoute(builder: (context) =>  AdminReports()),
+                                    );
+                                  },
                                 style:
                                 ButtonStyle(shape: MaterialStateProperty.all<RoundedRectangleBorder>(RoundedRectangleBorder(borderRadius: BorderRadius.zero)),
                                     backgroundColor:MaterialStateProperty.all(Colors.white70.withOpacity(0.2))),
@@ -412,7 +490,12 @@ class _AdminDashboardState extends State<AdminDashboard> {
                                 ),
                               SizedBox(height: 3.0,),
                               TextButton(
-                                  onPressed: () {},
+                                  onPressed: () {
+                                    Navigator.push(
+                                      context,
+                                      MaterialPageRoute(builder: (context) =>  AdminMasters()),
+                                    );
+                                  },
                                 style:
                                 ButtonStyle(shape: MaterialStateProperty.all<RoundedRectangleBorder>(RoundedRectangleBorder(borderRadius: BorderRadius.zero)),
                                     backgroundColor:MaterialStateProperty.all(Colors.white70.withOpacity(0.2))),
@@ -497,8 +580,8 @@ class _AdminDashboardState extends State<AdminDashboard> {
                   ],
                 ),
               ),
-             Expanded(
-               child: Container(
+              Expanded(
+                child: Container(
                     child: Column(
                       mainAxisAlignment: MainAxisAlignment.start,
                       crossAxisAlignment: CrossAxisAlignment.start,
@@ -511,64 +594,64 @@ class _AdminDashboardState extends State<AdminDashboard> {
                             children: [
                               Text(
                                   'Welcome ADMIN,',
-                              style: GoogleFonts.poppins(textStyle: TextStyle(fontSize: 24, fontWeight: FontWeight.w600, letterSpacing: 0.5, color: Colors.black),
-                              )),
+                                  style: GoogleFonts.poppins(textStyle: TextStyle(fontSize: 24, fontWeight: FontWeight.w600, letterSpacing: 0.5, color: Colors.black),
+                                  )),
                               SizedBox(width: 280.0,),
                               SizedBox(
-                                width: 520.0,
-                                height: 50.0,
-                                child: Padding(
-                                padding: const EdgeInsets.all(4.0),
-                                child: SearchAnchor(
-                                        builder: (BuildContext context, SearchController controller) {
+                                  width: 520.0,
+                                  height: 50.0,
+                                  child: Padding(
+                                    padding: const EdgeInsets.all(4.0),
+                                    child: SearchAnchor(
+                                      builder: (BuildContext context, SearchController controller) {
                                         return SearchBar(
-                                        controller: controller,
-                                        shape: MaterialStatePropertyAll<RoundedRectangleBorder>(
-                                            RoundedRectangleBorder(borderRadius: BorderRadius.zero)),
-                                        shadowColor: MaterialStatePropertyAll(Colors.white),
-                                        backgroundColor: MaterialStatePropertyAll(Colors.white),
-                                        onTap: () {
-                                        controller.openView();
-                                        },
-                                        onChanged: (_) {
-                                        controller.openView();
-                                        },
+                                          controller: controller,
+                                          shape: MaterialStatePropertyAll<RoundedRectangleBorder>(
+                                              RoundedRectangleBorder(borderRadius: BorderRadius.zero)),
+                                          shadowColor: MaterialStatePropertyAll(Colors.white),
+                                          backgroundColor: MaterialStatePropertyAll(Colors.white),
+                                          onTap: () {
+                                            controller.openView();
+                                          },
+                                          onChanged: (_) {
+                                            controller.openView();
+                                          },
                                           leading: const Icon(Icons.search),
                                           hintText: 'Search',
                                         );
-                                        }, suggestionsBuilder: (BuildContext context, SearchController controller)
-                                        {return List<ListTile>.generate(1, (int index) {
-                                          final String item = 'course ';
-                                          return ListTile(
-                                            title: Text(item),
-                                            onTap: () {
-                          setState(() {
-                            controller.closeView(item);
-                          });
-                                            },
-                                          );
-                                        });},
-                          
-                                        ),
-                          
-                          
-                          
-                                )
-                          
-                                ),
+                                      }, suggestionsBuilder: (BuildContext context, SearchController controller)
+                                    {return List<ListTile>.generate(1, (int index) {
+                                      final String item = 'course ';
+                                      return ListTile(
+                                        title: Text(item),
+                                        onTap: () {
+                                          setState(() {
+                                            controller.closeView(item);
+                                          });
+                                        },
+                                      );
+                                    });},
+
+                                    ),
+
+
+
+                                  )
+
+                              ),
                               SizedBox(width: 25.0,),
                               IconButton(onPressed: () {}, icon: Icon(CupertinoIcons.bell, color: Colors.black, size: 30.0,),),
                               SizedBox(width: 25.0,),
                               IconButton(onPressed: () {}, icon: Icon(CupertinoIcons.gear_big, color: Colors.black, size: 30.0,),),
                               SizedBox(width: 25.0,),
                               IconButton(onPressed: () {}, icon: Icon(CupertinoIcons.person_circle, color: Colors.redAccent, size: 30.0,),)
-                                ],
+                            ],
                           ),
                         ),
                         SizedBox(height: 30.0,),
                         Text('Portal Statistics',
-                            style: GoogleFonts.poppins(textStyle: TextStyle(fontSize: 21, fontWeight: FontWeight.w600, letterSpacing: 0.2, color: Colors.black),
-                            ),),
+                          style: GoogleFonts.poppins(textStyle: TextStyle(fontSize: 21, fontWeight: FontWeight.w600, letterSpacing: 0.2, color: Colors.black),
+                          ),),
                         SizedBox(height: 10.0,),
                         IntrinsicWidth(
                           child: Row(
@@ -588,20 +671,20 @@ class _AdminDashboardState extends State<AdminDashboard> {
                                     children: [
                                       SizedBox(height: 5.0,),
                                       Text('  ACTIVE ASSESSORS',
-                                    style: GoogleFonts.poppins(textStyle: TextStyle(fontSize: 16, fontWeight: FontWeight.w500, letterSpacing: 0.32, color: Colors.redAccent),
-                                    ),
+                                        style: GoogleFonts.poppins(textStyle: TextStyle(fontSize: 16, fontWeight: FontWeight.w500, letterSpacing: 0.32, color: Colors.redAccent),
+                                        ),
                                       ),
                                       SizedBox(height: 20.0,),
-                                       Row(
-                                         children: [
-                                           //**
-                                           //** Number input** //
-                                           //**
-                                           SizedBox(width: 220.0,),
-                                           Icon(CupertinoIcons.graph_circle, color: Colors.green),
-                                         ],
-                                       ),
-                          
+                                      Row(
+                                        children: [
+                                          //**
+                                          //** Number input** //
+                                          //**
+                                          SizedBox(width: 220.0,),
+                                          Icon(CupertinoIcons.graph_circle, color: Colors.green),
+                                        ],
+                                      ),
+
                                     ],
                                   ),
                                 ),
@@ -635,7 +718,7 @@ class _AdminDashboardState extends State<AdminDashboard> {
                                           Icon(CupertinoIcons.graph_circle, color: Colors.red),
                                         ],
                                       ),
-                          
+
                                     ],
                                   ),
                                 ),
@@ -667,10 +750,10 @@ class _AdminDashboardState extends State<AdminDashboard> {
                                           //**
                                           SizedBox(width: 220.0,),
                                           Icon(CupertinoIcons.graph_circle, color: Colors.green),
-                          
+
                                         ],
                                       ),
-                          
+
                                     ],
                                   ),
                                 ),
@@ -704,7 +787,7 @@ class _AdminDashboardState extends State<AdminDashboard> {
                                           Icon(CupertinoIcons.graph_circle, color: Colors.red),
                                         ],
                                       ),
-                          
+
                                     ],
                                   ),
                                 ),
@@ -728,15 +811,15 @@ class _AdminDashboardState extends State<AdminDashboard> {
                                   mainAxisAlignment: MainAxisAlignment.start,
                                   crossAxisAlignment: CrossAxisAlignment.start,
                                   children: [
-                                  SizedBox(height: 5.0,),
-                                  Center(
-                                    child: Text(' Monthly Assessments Count',
-                                      style: GoogleFonts.poppins(textStyle: TextStyle(fontSize: 22, fontWeight: FontWeight.w600, letterSpacing: 0.4, color: Colors.black),
+                                    SizedBox(height: 5.0,),
+                                    Center(
+                                      child: Text(' Monthly Assessments Count',
+                                        style: GoogleFonts.poppins(textStyle: TextStyle(fontSize: 22, fontWeight: FontWeight.w600, letterSpacing: 0.4, color: Colors.black),
+                                        ),
                                       ),
                                     ),
-                                  ),
                                   ],
-                              ),
+                                ),
                               ),
                             ),
                             SizedBox(width: 30.0,),
@@ -794,8 +877,8 @@ class _AdminDashboardState extends State<AdminDashboard> {
                       ],
                     )
 
-    ),
-    ),
+                ),
+              ),
 
                       ],
                
