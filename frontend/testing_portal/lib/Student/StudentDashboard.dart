@@ -146,7 +146,7 @@ class _StudentDashboardState extends State<StudentDashboard> {
                                 child: Row(
                                   children: [
                                     SizedBox(width: 10.0,),
-                                    Icon(CupertinoIcons.wrench,color: Colors.black,size: 20.0,),
+                                    Icon(CupertinoIcons.headphones,color: Colors.black,size: 20.0,),
                                     SizedBox(height: 40.0, width: 8.0,),
                                     Text('Support         '
                                         '              ',
@@ -226,10 +226,88 @@ class _StudentDashboardState extends State<StudentDashboard> {
                       ),
                       SizedBox(height: 20.0,),
                       SizedBox(
+                        width: 1240.0,
+                        height: 250.0,
                         child: Card(
-                          
+                          child: Container(
+                            decoration: BoxDecoration(
+                              borderRadius: BorderRadius.circular(15.0),
+                              gradient: LinearGradient(
+                                colors: [Colors.redAccent.withOpacity(1.0),Colors.redAccent.withOpacity(0.9),Colors.redAccent.withOpacity(0.8), Colors.pinkAccent.withOpacity(0.4)],
+                                begin: Alignment.topLeft,
+                                end: Alignment.bottomRight,
+                              ),
+                            ),
+                            child: Row(
+                              children: [
+                                Column(
+                                  children: [
+                                    //  Add Date API
+                                    SizedBox(height: 120.0,),
+                                    Text('     Welcome back, John!',
+                                      style: GoogleFonts.poppins(
+                                      textStyle: TextStyle(fontSize: 32, letterSpacing: 1.5, color: Colors.white, fontWeight: FontWeight.w600,),
+                                    ),
+                                    ),
+                                    Text('        Always stay updated in your student portal',
+                                      style: GoogleFonts.poppins(
+                                        textStyle: TextStyle(fontSize: 15, letterSpacing: 1.5, color: Colors.white, fontWeight: FontWeight.w200,),
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                              //  Add image
+                              ],
+                            ),
+                          ),
                         ),
                       ),
+                      SizedBox(height: 30.0,),
+                      SizedBox(
+                        width: 1240.0,
+                        height: 200.0,
+                        child: Card(
+                          shadowColor: Colors.grey,
+                          surfaceTintColor: Colors.white,
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(15.0),
+                          ),
+                          child: Column(
+                            mainAxisAlignment: MainAxisAlignment.start,
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              SizedBox(height: 10.0,),
+                               Text('   Today Assessments',
+                                  style: GoogleFonts.poppins(textStyle: TextStyle(fontSize: 22, fontWeight: FontWeight.w600, letterSpacing: 0.4, color: Colors.black),
+                                  ),
+                                ),
+                            ],
+                          ),
+                        ),
+                      ),
+                      SizedBox(height: 30.0,),
+                      SizedBox(
+                        width: 500.0,
+                        height: 150.0,
+                        child: Card(
+                          shadowColor: Colors.grey,
+                          surfaceTintColor: Colors.white,
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(8.0),
+                          ),
+                          child: Column(
+                            mainAxisAlignment: MainAxisAlignment.start,
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              SizedBox(height: 10.0,),
+                               Text('  Upcoming Assessments',
+                                  style: GoogleFonts.poppins(textStyle: TextStyle(fontSize: 22, fontWeight: FontWeight.w600, letterSpacing: 0.4, color: Colors.black),
+                                  ),
+                                ),
+                            ],
+                          ),
+                        ),
+                      )
                     ],
                   )
 

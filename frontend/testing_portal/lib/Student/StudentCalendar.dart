@@ -138,7 +138,7 @@ class _StudentCalendarState extends State<StudentCalendar> {
                                 child: Row(
                                   children: [
                                     SizedBox(width: 10.0,),
-                                    Icon(CupertinoIcons.wrench,color: Colors.black,size: 20.0,),
+                                    Icon(CupertinoIcons.headphones,color: Colors.black,size: 20.0,),
                                     SizedBox(height: 40.0, width: 8.0,),
                                     Text('Support         '
                                         '              ',

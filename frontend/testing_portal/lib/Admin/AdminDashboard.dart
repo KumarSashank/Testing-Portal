@@ -661,7 +661,7 @@ class _AdminDashboardState extends State<AdminDashboard> {
                                 height: 100.0,
                                 child: Card(
                                   shadowColor: Colors.grey,
-                                  surfaceTintColor: Colors.grey,
+                                  surfaceTintColor: Colors.white,
                                   shape: RoundedRectangleBorder(
                                     borderRadius: BorderRadius.circular(8.0),
                                   ),
@@ -695,7 +695,7 @@ class _AdminDashboardState extends State<AdminDashboard> {
                                 height: 100.0,
                                 child: Card(
                                   shadowColor: Colors.grey,
-                                  surfaceTintColor: Colors.grey,
+                                  surfaceTintColor: Colors.white,
                                   shape: RoundedRectangleBorder(
                                     borderRadius: BorderRadius.circular(8.0),
                                   ),
@@ -729,7 +729,7 @@ class _AdminDashboardState extends State<AdminDashboard> {
                                 height: 100.0,
                                 child: Card(
                                   shadowColor: Colors.grey,
-                                  surfaceTintColor: Colors.grey,
+                                  surfaceTintColor: Colors.white,
                                   shape: RoundedRectangleBorder(
                                     borderRadius: BorderRadius.circular(8.0),
                                   ),
@@ -764,7 +764,7 @@ class _AdminDashboardState extends State<AdminDashboard> {
                                 height: 100.0,
                                 child: Card(
                                   shadowColor: Colors.grey,
-                                  surfaceTintColor: Colors.grey,
+                                  surfaceTintColor: Colors.white,
                                   shape: RoundedRectangleBorder(
                                     borderRadius: BorderRadius.circular(8.0),
                                   ),
@@ -803,7 +803,7 @@ class _AdminDashboardState extends State<AdminDashboard> {
                               height: 400.0,
                               child: Card(
                                 shadowColor: Colors.grey,
-                                surfaceTintColor: Colors.grey,
+                                surfaceTintColor: Colors.white,
                                 shape: RoundedRectangleBorder(
                                   borderRadius: BorderRadius.circular(8.0),
                                 ),
@@ -828,7 +828,7 @@ class _AdminDashboardState extends State<AdminDashboard> {
                               height: 400.0,
                               child: Card(
                                 shadowColor: Colors.grey,
-                                surfaceTintColor: Colors.grey,
+                                surfaceTintColor: Colors.white,
                                 shape: RoundedRectangleBorder(
                                   borderRadius: BorderRadius.circular(8.0),
                                 ),
@@ -855,7 +855,7 @@ class _AdminDashboardState extends State<AdminDashboard> {
                           height: 100.0,
                           child: Card(
                             shadowColor: Colors.grey,
-                            surfaceTintColor: Colors.grey,
+                            surfaceTintColor: Colors.white,
                             shape: RoundedRectangleBorder(
                               borderRadius: BorderRadius.circular(8.0),
                             ),
