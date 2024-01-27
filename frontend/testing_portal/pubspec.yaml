@@ -53,6 +53,8 @@ flutter:
     - images/assessor.png
     - images/ssc.png
     - images/admin1.png
+    - images/ill.png
+
 
 
   # An image asset can refer to one or more resolution-specific "variants", see

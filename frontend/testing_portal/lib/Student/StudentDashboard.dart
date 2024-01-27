@@ -15,6 +15,7 @@ class StudentDashboard extends StatefulWidget {
 
 class _StudentDashboardState extends State<StudentDashboard> {
   bool hover = true;
+  var name;
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -244,7 +245,7 @@ class _StudentDashboardState extends State<StudentDashboard> {
                                   children: [
                                     //  Add Date API
                                     SizedBox(height: 120.0,),
-                                    Text('     Welcome back, John!',
+                                    Text('     Welcome back, $name!',
                                       style: GoogleFonts.poppins(
                                       textStyle: TextStyle(fontSize: 32, letterSpacing: 1.5, color: Colors.white, fontWeight: FontWeight.w600,),
                                     ),
@@ -257,6 +258,9 @@ class _StudentDashboardState extends State<StudentDashboard> {
                                   ],
                                 ),
                               //  Add image
+                                SizedBox(width: 300.0,),
+                                Image(image: AssetImage('images/ill.png',
+                                ), height: 950.0,width: 500.0,),
                               ],
                             ),
                           ),
