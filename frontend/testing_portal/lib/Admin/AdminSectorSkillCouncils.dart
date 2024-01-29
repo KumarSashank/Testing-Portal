@@ -794,6 +794,71 @@ class _AdminSectorSkillCouncilsState extends State<AdminSectorSkillCouncils> {
                         ],
                       ),
                     ),
+                    SizedBox(height: 30.0,),
+                    Row(
+                      children: [
+                        Text('Sector Skill Councils',
+                      style: GoogleFonts.poppins(textStyle: TextStyle(fontSize: 21, fontWeight: FontWeight.w600, letterSpacing: 0.2, color: Colors.black),
+                      ),),
+                        SizedBox(width: 670.0,),
+                        ElevatedButton(onPressed: () {},
+                            style: ButtonStyle(
+                              shape: MaterialStateProperty.all(RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(5.0),
+                              )),
+                              backgroundColor: MaterialStatePropertyAll(Colors.white60),
+                            ),
+
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.start,
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Text('Export',
+                              style: GoogleFonts.poppins(textStyle: TextStyle(fontSize: 14, fontWeight: FontWeight.w400, letterSpacing: 0.2, color: Colors.redAccent),
+                              ),),
+                            SizedBox(width: 40.0,),
+                            Icon(CupertinoIcons.chevron_up_chevron_down, color: Colors.redAccent,size: 18.0,)
+                          ],
+                        ),
+                        ),
+                        SizedBox(width: 10.0,),
+                        ElevatedButton(onPressed: () {},
+                          style: ButtonStyle(
+                            shape: MaterialStateProperty.all(RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(5.0),
+                            )),
+                            backgroundColor: MaterialStatePropertyAll(Colors.redAccent),
+                          ),
+
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.start,
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Text('Add New SSC',
+                                style: GoogleFonts.poppins(textStyle: TextStyle(fontSize: 14, fontWeight: FontWeight.w400, letterSpacing: 0.2, color: Colors.white),
+                                ),),
+                              SizedBox(width: 10.0,),
+                              Icon(CupertinoIcons.plus_circle, color: Colors.white, size: 18.0,)
+                            ],
+                          ),
+                        ),
+                      ],
+                    ),
+                    Text(
+                        'Total Councils: ' ,//add number API
+                        style: GoogleFonts.poppins(textStyle: TextStyle(fontSize: 12, fontWeight: FontWeight.w500, letterSpacing: 0.2, color: Colors.black),
+              ),
+                    ),
+                    Card(
+                      shadowColor: Colors.white60,
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(8.0),
+                      ),
+                      child: Container(
+
+                        ),
+                      ),
+
                   ],
                 ),
               ),
