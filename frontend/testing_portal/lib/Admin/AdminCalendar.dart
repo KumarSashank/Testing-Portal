@@ -796,7 +796,10 @@ class _AdminCalendarState extends State<AdminCalendar> {
                           ],
                         ),
                       ),
-
+                      SizedBox(height: 30.0,),
+                      Text('Calendar    ',
+                        style: GoogleFonts.poppins(textStyle: TextStyle(fontSize: 21, fontWeight: FontWeight.w600, letterSpacing: 0.2, color: Colors.black),
+                        ),),
                     ],
                   ),
             ),
