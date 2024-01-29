@@ -1,8 +1,21 @@
 const express = require("express");
 const cors = require("cors");
+const multer = require("multer");
+const fs = require("fs");
 require("dotenv").config();
 
 const app = express();
+const upload = multer({ dest: "uploads/" });
+
+app.post("/upload", upload.single("csvFile"), (req, res) => {
+  // Access uploaded file
+  const file = req.file;
+  if (!file) {
+    return res.status(400).send("No file uploaded.");
+  }
+
+  res.send("file uploaded");
+});
 
 // Use cors middleware before defining routes
 app.use(cors());

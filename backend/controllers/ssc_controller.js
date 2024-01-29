@@ -1,9 +1,9 @@
 `use strict`;
 
 const db = require("../db");
-const firebase = require("firebase");
+const firebase = require("firebase-admin");
 
-const firestore = db.firestore();
+const firestore = db;
 
 module.exports.createQPS = async (req, res) => {
   console.log("create QPS");

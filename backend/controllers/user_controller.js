@@ -1,9 +1,10 @@
 `use strict`;
 
 const db = require("../db");
-const firebase = require("firebase");
+const firebase = require("firebase-admin");
+// const admin = require("firebase-admin");
 
-const firestore = db.firestore();
+const firestore = db;
 
 module.exports.check_user = async (req, res) => {
   console.log("checking from console");
@@ -17,9 +18,10 @@ module.exports.signupUser = async (req, res) => {
 
   if (adminId == "ZVbVLz0Jwqhmt13yivVHWhILdbN2") {
     try {
-      const userCredential = await firebase
-        .auth()
-        .createUserWithEmailAndPassword(email, password);
+      const userCredential = await firebase.auth().createUser({
+        email: email,
+        password: password,
+      });
       const user = userCredential.user;
 
       await firestore.collection("users").doc(user.uid).set({
@@ -47,16 +49,17 @@ module.exports.createSSC = async (req, res) => {
 
   if (adminId == "ZVbVLz0Jwqhmt13yivVHWhILdbN2") {
     try {
-      const userCredential = await firebase
-        .auth()
-        .createUserWithEmailAndPassword(email, password);
+      const userCredential = await firebase.auth().createUser({
+        email: email,
+        password: password,
+      });
       const user = userCredential.user;
-
+      console.log(userCredential);
       await firestore.collection("SSC").doc(SSC_code).set({
-        email: user.email,
+        email: userCredential.email,
         createdAt: new Date(),
         role: "SSC",
-        userId: user.uid,
+        userId: userCredential.uid,
         username: username,
         password: password,
         Skill_council_name: Skill_council_name,
@@ -78,10 +81,14 @@ module.exports.signinUser = async (req, res) => {
   const { role } = req.params; // Take role parameter from the route
 
   try {
+    // const userCredential = await firebase
+    //   .auth()
+    //   .signInWithEmailAndPassword(email, password);
     const userCredential = await firebase
       .auth()
       .signInWithEmailAndPassword(email, password);
     const user = userCredential.user;
+    const token = await firebase.auth().createCustomToken(user.uid);
 
     const userData = await firestore.collection("users").doc(user.uid).get();
     const userDataObj = userData.data();
@@ -89,7 +96,7 @@ module.exports.signinUser = async (req, res) => {
     const userRole = userDataObj.role; // Get the role value from userDataObj
 
     if (role == userRole) {
-      res.send("User signed in");
+      res.send({ token });
     } else {
       res.send(
         `You are trying to sign in with role ${role}, but your role is ${userRole}`
