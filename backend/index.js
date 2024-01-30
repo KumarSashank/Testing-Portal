@@ -5,17 +5,17 @@ const fs = require("fs");
 require("dotenv").config();
 
 const app = express();
-const upload = multer({ dest: "uploads/" });
+// const upload = multer({ dest: "uploads/" });
 
-app.post("/upload", upload.single("csvFile"), (req, res) => {
-  // Access uploaded file
-  const file = req.file;
-  if (!file) {
-    return res.status(400).send("No file uploaded.");
-  }
+// app.post("/upload", upload.single("csvFile"), (req, res) => {
+//   // Access uploaded file
+//   const file = req.file;
+//   if (!file) {
+//     return res.status(400).send("No file uploaded.");
+//   }
 
-  res.send("file uploaded");
-});
+//   res.send("file uploaded");
+// });
 
 // Use cors middleware before defining routes
 app.use(cors());
@@ -27,6 +27,8 @@ const PORT = process.env.PORT || 8000;
 // Define your routes after setting up middleware
 const route = require("./routes/user_route");
 const ssc_route = require("./routes/ssc_route");
+const file_route = require("./routes/file_route");
+app.use(file_route);
 app.use(route);
 app.use(ssc_route);
 
