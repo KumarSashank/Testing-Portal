@@ -32,11 +32,45 @@ module.exports.uploadController = async (req, res) => {
         res.status(500).send("Error uploading file to Firebase Storage");
       });
 
-      fileStream.on("finish", () => {
-        res.send("File uploaded successfully to Firebase Storage.");
+      fileStream.on("finish", async () => {
+        try {
+          // Get the uploaded file link
+          const [url] = await fileUpload.getSignedUrl({
+            action: "read",
+            expires: "01-01-3000",
+          });
+
+          // Get the current date
+          const currentDate = new Date();
+
+          // Format the date as needed (e.g., YYYY-MM-DD)
+          const formattedDate = currentDate.toISOString().split("T")[0]; // Get date in YYYY-MM-DD format
+
+          // Combine the name with the formatted date
+          const nameWithDate = QPS + "-" + formattedDate;
+
+          // Store the link in a Firestore collection
+          const sscDoc = await firestore.collection("SSC").doc(SSC).get();
+          const qpsDoc = await sscDoc.ref.collection("QPS").doc(QPS).get();
+
+          //Need to check the question was already uploaded or not
+
+          await qpsDoc.ref.collection("questionpapers").doc(nameWithDate).set({
+            createdAt: new Date(),
+            filename: file.originalname,
+            url: url,
+          });
+
+          res.send("File uploaded successfully to Firebase Storage.");
+        } catch (error) {
+          console.error("Error storing file link in Firestore:", error);
+          res.status(500).send("Error storing file link in Firestore");
+        }
       });
 
       fileStream.end(file.buffer);
+
+      //get the uploaded file link
     } catch (error) {
       console.error("Error uploading file:", error);
       res.status(500).send("Internal Server Error");
