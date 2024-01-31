@@ -17,6 +17,7 @@ var serviceAccount = require("./portaldev-14a99-firebase-adminsdk-a31b8-15d06425
 firebase.initializeApp({
   credential: firebase.credential.cert(serviceAccount),
   databaseURL: "https://portaldev-14a99.firebaseio.com",
+  storageBucket: "gs://portaldev-14a99.appspot.com",
 });
 
 const db = firebase.firestore();
