@@ -5,6 +5,7 @@ const {
   signinUser,
   createSSC,
   getsectors,
+  adminSignin,
 } = require("../controllers/user_controller");
 const router = Router();
 
@@ -13,6 +14,7 @@ router.post("/signup", signupUser); // Route for user signup
 router.post("/signin/:role", signinUser); // Route for user signin with role parameter
 router.post("/createSSC", createSSC); // Route for creating SSC
 router.get("/getsectors", getsectors);
+router.post("/adminSignin", adminSignin);
 
 router.get("/hello", (req, res) => {
   res.send("Hello, World!");
