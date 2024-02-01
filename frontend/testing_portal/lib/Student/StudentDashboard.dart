@@ -3,6 +3,7 @@ import 'package:testing_portal/main.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:testing_portal/Student/StudentLoginScreen.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:testing_portal/Student/StartExamScreen.dart';
 
 class StudentDashboard extends StatefulWidget {
   const StudentDashboard({Key? key}) : super(key: key);
@@ -105,7 +106,6 @@ class _StudentDashboardState extends State<StudentDashboard> {
                               ),
                             ),
                           ),
-
                         SizedBox(height: 30.0,),
                         SizedBox(
                           //Add scrolling view
@@ -130,6 +130,7 @@ class _StudentDashboardState extends State<StudentDashboard> {
                                   child: Container(
                                     child: Column(
                                       children: [
+                                        SizedBox(height: 20.0),
                                         Row(
                                           children: [
                                             Text('     Assessment Details',
@@ -137,6 +138,55 @@ class _StudentDashboardState extends State<StudentDashboard> {
                                             ),
                                               // Call Time function
                                             )
+                                          ],
+                                        ),
+                                        SizedBox(height: 20.0,),
+                                        Row(
+                                          children: [
+                                            SizedBox(width: 30.0,),
+                                            Text('Date of exam',
+                                              style: GoogleFonts.poppins(textStyle: TextStyle(fontSize: 16, fontWeight: FontWeight.w500, letterSpacing: 0.6, color: Colors.black),
+                                              ),),
+                                            //Date of the exam to be taken from the data
+                                            SizedBox(width: 50.0,),
+                                            Text('Code',
+                                              style: GoogleFonts.poppins(textStyle: TextStyle(fontSize: 16, fontWeight: FontWeight.w500, letterSpacing: 0.6, color: Colors.black),
+                                              ),), //Code of the exam
+                                            SizedBox(width: 50.0,),
+                                            Text('APSSDC',
+                                              style: GoogleFonts.poppins(textStyle: TextStyle(fontSize: 16, fontWeight: FontWeight.w500, letterSpacing: 0.6, color: Colors.black),
+                                              ),), //Department conducting the exam
+                                            SizedBox(width: 50.0,),
+                                            Text('Sector Skill council',
+                                              style: GoogleFonts.poppins(textStyle: TextStyle(fontSize: 16, fontWeight: FontWeight.w500, letterSpacing: 0.6, color: Colors.black),
+                                              ),), // Sector the exam belongs to
+                                            SizedBox(width: 50.0,),
+                                            Text('Job role',
+                                              style: GoogleFonts.poppins(textStyle: TextStyle(fontSize: 16, fontWeight: FontWeight.w500, letterSpacing: 0.6, color: Colors.black),
+                                              ),), //Job role
+                                            SizedBox(width: 50.0,),
+                                            SizedBox(
+                                              height:30.0,
+                                              child: ElevatedButton( child: Text(
+                                                ' Start Exam  ',
+                                                style: GoogleFonts.poppins(
+                                                  textStyle: TextStyle(fontSize: 12, letterSpacing: 0.5, color: Colors.white),
+                                                ),
+                                              ),
+                                                style: ElevatedButton.styleFrom(
+                                                  shape: RoundedRectangleBorder(
+                                                    borderRadius: BorderRadius.circular(5.0),
+                                                  ),
+                                                  primary: Colors.redAccent,
+                                                ),
+                                                onPressed: () {Navigator.push(
+                                                  context,
+                                                  MaterialPageRoute(builder: (context) => const StartExamScreen()),
+                                                );
+                                                },
+                                              ),
+                                            ),
+
                                           ],
                                         ),
                                       ],
