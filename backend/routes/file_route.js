@@ -6,6 +6,6 @@ const fs = require("fs");
 const upload = multer({ dest: "uploads/" });
 const { uploadController } = require("../controllers/file_controller");
 
-router.post("/upload", upload.single("csvFile"), uploadController);
+router.post("/upload", upload.single("file"), uploadController);
 
 module.exports = router;
