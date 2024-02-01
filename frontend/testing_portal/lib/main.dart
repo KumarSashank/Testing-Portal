@@ -5,6 +5,11 @@ import 'package:testing_portal/Admin/AdminLoginScreen.dart';
 import 'package:testing_portal/Assessor/AssessorLoginScreen.dart';
 import 'package:testing_portal/SSC/SSCLoginScreen.dart';
 import 'package:testing_portal/Student/StudentLoginScreen.dart';
+import 'package:responsive_framework/responsive_framework.dart';
+import 'package:responsive_framework/responsive_grid.dart';
+import 'package:responsive_framework/responsive_row_column.dart';
+import 'package:responsive_framework/responsive_value.dart';
+import 'package:responsive_framework/responsive_wrapper.dart';
 
 void main() {
   runApp(MyApp());
@@ -14,6 +19,19 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
+      builder: (context, child) => ResponsiveWrapper.builder(
+          BouncingScrollWrapper.builder(context, child!),
+          maxWidth: 1600,
+          minWidth: 450,
+          defaultScale: true,
+          breakpoints: [
+            const ResponsiveBreakpoint.resize(450, name: MOBILE),
+            const ResponsiveBreakpoint.resize(800, name: TABLET),
+            const ResponsiveBreakpoint.resize(1250, name: DESKTOP),
+            const ResponsiveBreakpoint.resize(2460, name: "4K"),
+          ],
+          background: Container(color: const Color(0xFFF5F5F5))),
+      debugShowCheckedModeBanner: false,
       title: 'Login Page',
       theme: ThemeData(
         primarySwatch: Colors.red,
@@ -22,7 +40,6 @@ class MyApp extends StatelessWidget {
           hoverColor: Colors.redAccent,
         )
       ),
-      debugShowCheckedModeBanner: false,
       home: MyHomePage(),
     );
   }
