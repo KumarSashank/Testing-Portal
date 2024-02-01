@@ -1,9 +1,11 @@
 `use strict`;
 
 const db = require("../db");
-const firebase = require("firebase");
+const firebase = require("firebase-admin");
+// const admin = require("firebase-admin");
 
-const firestore = db.firestore();
+const firestore = db;
+const { v4: uuidv4 } = require("uuid");
 
 module.exports.check_user = async (req, res) => {
   console.log("checking from console");
@@ -17,9 +19,10 @@ module.exports.signupUser = async (req, res) => {
 
   if (adminId == "ZVbVLz0Jwqhmt13yivVHWhILdbN2") {
     try {
-      const userCredential = await firebase
-        .auth()
-        .createUserWithEmailAndPassword(email, password);
+      const userCredential = await firebase.auth().createUser({
+        email: email,
+        password: password,
+      });
       const user = userCredential.user;
 
       await firestore.collection("users").doc(user.uid).set({
@@ -47,16 +50,17 @@ module.exports.createSSC = async (req, res) => {
 
   if (adminId == "ZVbVLz0Jwqhmt13yivVHWhILdbN2") {
     try {
-      const userCredential = await firebase
-        .auth()
-        .createUserWithEmailAndPassword(email, password);
-      const user = userCredential.user;
-
+      // const userCredential = await firebase.auth().createUser({
+      //   email: email,
+      //   password: password,
+      // });
+      // const user = userCredential.user;
+      // console.log(userCredential);
       await firestore.collection("SSC").doc(SSC_code).set({
-        email: user.email,
+        email: email,
         createdAt: new Date(),
         role: "SSC",
-        userId: user.uid,
+        userId: userCredential.uid,
         username: username,
         password: password,
         Skill_council_name: Skill_council_name,
@@ -78,10 +82,14 @@ module.exports.signinUser = async (req, res) => {
   const { role } = req.params; // Take role parameter from the route
 
   try {
+    // const userCredential = await firebase
+    //   .auth()
+    //   .signInWithEmailAndPassword(email, password);
     const userCredential = await firebase
       .auth()
       .signInWithEmailAndPassword(email, password);
     const user = userCredential.user;
+    const token = await firebase.auth().createCustomToken(user.uid);
 
     const userData = await firestore.collection("users").doc(user.uid).get();
     const userDataObj = userData.data();
@@ -89,7 +97,7 @@ module.exports.signinUser = async (req, res) => {
     const userRole = userDataObj.role; // Get the role value from userDataObj
 
     if (role == userRole) {
-      res.send("User signed in");
+      res.send({ token });
     } else {
       res.send(
         `You are trying to sign in with role ${role}, but your role is ${userRole}`
@@ -152,5 +160,39 @@ module.exports.getsectors = async (req, res) => {
       .send(
         "An error occurred while retrieving SSC collection names and QPS names."
       );
+  }
+};
+
+module.exports.adminSignin = async (req, res) => {
+  const { username, password } = req.body;
+
+  try {
+    // Query Firestore for the "Admin" document in the "users" collection
+    const adminDoc = await firestore.collection("users").doc("Admin").get();
+
+    // Check if the document exists
+    if (adminDoc.exists) {
+      const adminData = adminDoc.data();
+      console.log(adminData);
+      // Extract the fields from the document
+      if (adminData.username == username && adminData.password == password) {
+        // Create a session ID to represent this user's logged-in status
+        const sessionId = uuidv4();
+        // Store the session ID in the "sessions" collection
+        await firestore.collection("sessions").doc(sessionId).set({
+          username: adminData.username,
+          createdAt: new Date(),
+        });
+        // Respond with the session ID
+        res.send({ sessionId });
+      } else {
+        res.send("Incorrect username or password");
+      }
+    } else {
+      res.status(404).send("Document 'Admin' not found");
+    }
+  } catch (error) {
+    console.error("Error fetching document:", error);
+    res.status(500).send("Failed to fetch document");
   }
 };
