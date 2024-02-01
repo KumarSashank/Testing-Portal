@@ -794,11 +794,122 @@ class _AdminAssessorsState extends State<AdminAssessors> {
                         ],
                       ),
                     ),
+                    SizedBox(height: 50.0,),
+                    Text('Assessors',
+                      style: GoogleFonts.poppins(textStyle: TextStyle(fontSize: 21, fontWeight: FontWeight.w600, letterSpacing: 0.2, color: Colors.black),
+                      ),),
+                    SizedBox(height: 50.0,),
+                    Center(
+                      child: Container(
+                        height: 180.0,
+                        width: 850.0,
+                        child: Card(
+                          color: Colors.white,
+                          surfaceTintColor: Colors.white,
+                          child: Row(
+                            children: [
+                              IntrinsicWidth(
+                                child: Column(
+                                  children: [
+                                    SizedBox(height: 20.0,),
+                                    Text('Sector Skill Council:',
+                                      style: GoogleFonts.poppins(textStyle: TextStyle(fontSize: 21, fontWeight: FontWeight.w600, letterSpacing: 0.2, color: Colors.black),
+                                      ),),
+                                    SizedBox(height: 20.0,),
+                                    Row(
+                                      children: [
+                                        SizedBox(width: 50.0,),
+                                        SizedBox(
+                                          width: 270.0,
+                                          height: 40.0,
+                                          child: ElevatedButton(onPressed: () {},
+                                            style: ButtonStyle(
+                                              side: MaterialStatePropertyAll(BorderSide(
+                                                width: 0.7,
+                                                color: Colors.black,
+                                              ),
+                                              ),
+                                              surfaceTintColor: MaterialStatePropertyAll(Colors.white),
+                                              overlayColor: MaterialStatePropertyAll(Colors.white),
+                                              foregroundColor: MaterialStatePropertyAll(Colors.white),
+                                              shape: MaterialStateProperty.all(RoundedRectangleBorder(
+                                                borderRadius: BorderRadius.circular(5.0),
+                                              )),
+                                              backgroundColor: MaterialStatePropertyAll(Colors.white),
+                                            ),
+                                            child: Row(
+                                              mainAxisAlignment: MainAxisAlignment.start,
+                                              children: [
+                                                Text('Select Sector Skill Council',
+                                                  style: GoogleFonts.poppins(textStyle: TextStyle(fontSize: 14, fontWeight: FontWeight.w400, letterSpacing: 0.2, color: Colors.black),
+                                                  ),),
+                                                SizedBox(width: 20.0,),
+                                                Icon(CupertinoIcons.chevron_up_chevron_down, color: Colors.black,size: 18.0,)
+                                              ],
+                                            ),
+                                          ),
+                                        ),
+                                      ],
+                                    ),
+                                  ],
+                                ),
+                              ),
+                              SizedBox(width: 100.0,),
+                              IntrinsicWidth(
+                                child: Column(
+                                  children: [
+                                    SizedBox(height: 20.0,),
+                                    Text('Sector Skill Council:',
+                                      style: GoogleFonts.poppins(textStyle: TextStyle(fontSize: 21, fontWeight: FontWeight.w600, letterSpacing: 0.2, color: Colors.black),
+                                      ),),
+                                    SizedBox(height: 20.0,),
+                                    Row(
+                                      children: [
+                                        SizedBox(width: 50.0,),
+                                        SizedBox(
+                                          width: 270.0,
+                                          height: 40.0,
+                                          child: ElevatedButton(onPressed: () {},
+                                            style: ButtonStyle(
+                                              side: MaterialStatePropertyAll(BorderSide(
+                                                width: 0.7,
+                                                color: Colors.black,
+                                              ),
+                                              ),
+                                              surfaceTintColor: MaterialStatePropertyAll(Colors.white),
+                                              overlayColor: MaterialStatePropertyAll(Colors.white),
+                                              foregroundColor: MaterialStatePropertyAll(Colors.white),
+                                              shape: MaterialStateProperty.all(RoundedRectangleBorder(
+                                                borderRadius: BorderRadius.circular(5.0),
+                                              )),
+                                              backgroundColor: MaterialStatePropertyAll(Colors.white),
+                                            ),
+                                            child: Row(
+                                              mainAxisAlignment: MainAxisAlignment.start,
+                                              children: [
+                                                Text('Select Sector Skill Council',
+                                                  style: GoogleFonts.poppins(textStyle: TextStyle(fontSize: 14, fontWeight: FontWeight.w400, letterSpacing: 0.2, color: Colors.black),
+                                                  ),),
+                                                SizedBox(width: 20.0,),
+                                                Icon(CupertinoIcons.chevron_up_chevron_down, color: Colors.black,size: 18.0,)
+                                              ],
+                                            ),
+                                          ),
+                                        ),
+                                      ],
+                                    ),
+                                  ],
+                                ),
+                              )
+                            ],
+                          ),
+                        ),
+                      ),
+                    ),
                   ],
                 ),
               ),
             ),
-
           ],
 
         ),
