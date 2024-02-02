@@ -3,165 +3,140 @@
 const db = require("../db");
 const firebase = require("firebase-admin");
 const xlsx = require("xlsx");
+const fs = require("fs");
+const util = require("util");
+const unlinkAsync = util.promisify(fs.unlink);
 // const admin = require("firebase-admin");
 
 const firestore = db;
 
+async function uploadQuestionPapers(file, SSC, QPS) {
+  const nameWithDate = generateNameWithDate(QPS);
+  const workbook = readExcelFile(file);
+  const data = extractDataFromWorkbook(workbook);
+
+  await uploadQuestionPaperData(nameWithDate, SSC, data);
+
+  const url = await uploadFileToStorage(file);
+  const questionPaperRef = await getQuestionPaperReference(SSC, QPS);
+
+  const questionsCollectionPath = await createQuestionPaperDocument(
+    nameWithDate,
+    file.originalname,
+    url,
+    questionPaperRef,
+    SSC,
+    QPS
+  );
+
+  return {
+    url: url,
+    filename: file.originalname,
+    SSC: SSC,
+    QPS: QPS,
+    path: questionsCollectionPath,
+  };
+}
+
+function generateNameWithDate(QPS) {
+  const currentDate = new Date();
+  const formattedDate = currentDate.toISOString().split("T")[0];
+  return QPS + "-" + formattedDate;
+}
+
+function readExcelFile(file) {
+  return xlsx.readFile(file.path);
+}
+
+function extractDataFromWorkbook(workbook) {
+  const sheetName = workbook.SheetNames[0];
+  const worksheet = workbook.Sheets[sheetName];
+  return xlsx.utils.sheet_to_json(worksheet);
+}
+
+async function uploadQuestionPaperData(nameWithDate, SSC, data) {
+  try {
+    await firestore.collection("question_papers").doc(nameWithDate).set({
+      updatedAt: new Date(),
+      ssc: SSC,
+      qps: nameWithDate,
+    });
+
+    const qpsRef = firestore.collection("question_papers").doc(nameWithDate);
+    for (const question of data) {
+      await qpsRef.collection("questions").add(question);
+      console.log("Question uploaded successfully:", question.Question);
+    }
+  } catch (error) {
+    console.error("Error uploading question:", error);
+    throw error;
+  }
+}
+
+async function uploadFileToStorage(file) {
+  const bucket = firebase.storage().bucket();
+  const destinationPath = "Question_Papers/" + file.originalname;
+  await bucket.upload(file.path, { destination: destinationPath });
+  const [url] = await bucket.file(destinationPath).getSignedUrl({
+    action: "read",
+    expires: "03-09-2491",
+  });
+  return url;
+}
+
+async function getQuestionPaperReference(SSC, QPS) {
+  const sscDoc = await firestore.collection("SSC").doc(SSC).get();
+  return sscDoc.ref.collection("QPS").doc(QPS).ref;
+}
+
+async function createQuestionPaperDocument(
+  nameWithDate,
+  filename,
+  url,
+  questionPaperRef,
+  SSC,
+  QPS
+) {
+  try {
+    const sscDoc = await firestore.collection("SSC").doc(SSC).get();
+    const qpsDoc = await sscDoc.ref.collection("QPS").doc(QPS).get();
+
+    //Need to check the question was already uploaded or not
+    const questionsCollectionPath = `question_papers/${nameWithDate}/questions`;
+
+    await qpsDoc.ref.collection("questionpapers").doc(nameWithDate).set({
+      createdAt: new Date(),
+      filename: filename,
+      url: url,
+      path: questionsCollectionPath,
+    });
+
+    // Return the path to the questions collection
+    return questionsCollectionPath;
+  } catch (error) {
+    console.error("Error creating question paper document:", error);
+    throw error;
+  }
+}
+
 module.exports.uploadController = async (req, res) => {
   try {
-    // Access uploaded file
     const file = req.file;
     if (!file) {
       return res.status(400).send("No file uploaded.");
     }
 
-    // try {
-    //   const workbook = xlsx.read(file.buffer, { type: "buffer" });
-    //   console.log(workbook);
-    //   if (!workbook.SheetNames || workbook.SheetNames.length === 0) {
-    //     throw new Error("No sheets found in the workbook.");
-    //   }
-
-    //   // Assuming the XLS file contains only one worksheet
-    //   const worksheet = workbook.Sheets[workbook.SheetNames[1]];
-
-    //   // Convert the worksheet to a JSON object
-    //   const jsonData = xlsx.utils.sheet_to_json(worksheet);
-
-    //   // Process the JSON data
-    //   console.log(jsonData);
-    // } catch (error) {
-    //   console.error("Error uploading file:", error);
-    //   res.status(500).send("Internal Server Error");
-    // }
-
     const { SSC, QPS } = req.body;
     console.log(SSC);
     console.log(QPS);
 
-    const bucket = firebase.storage().bucket();
-    const destinationPath = "Question_Papers/" + file.originalname; // Set your destination path here
-    await bucket.upload(file.path, { destination: destinationPath });
+    const responseJson = await uploadQuestionPapers(file, SSC, QPS);
 
-    // Get the download URL for the uploaded file
-    const [url] = await bucket.file(destinationPath).getSignedUrl({
-      action: "read",
-      expires: "03-09-2491", // Adjust the expiration date as needed
-    });
+    // Delete the uploaded file after the total process completed
+    await unlinkAsync(file.path);
+    console.log("Uploaded file deleted successfully.");
 
-    // Get the current date
-    const currentDate = new Date();
-
-    // Format the date as needed (e.g., YYYY-MM-DD)
-    const formattedDate = currentDate.toISOString().split("T")[0]; // Get date in YYYY-MM-DD format
-
-    // Combine the name with the formatted date
-    const nameWithDate = QPS + "-" + formattedDate;
-
-    // Store the link in a Firestore collection
-    const sscDoc = await firestore.collection("SSC").doc(SSC).get();
-    const qpsDoc = await sscDoc.ref.collection("QPS").doc(QPS).get();
-
-    //Need to check the question was already uploaded or not
-
-    await qpsDoc.ref.collection("questionpapers").doc(nameWithDate).set({
-      createdAt: new Date(),
-      filename: file.originalname,
-      url: url,
-    });
-
-    // Construct JSON response
-    const responseJson = {
-      url: url,
-      filename: file.originalname,
-      SSC: SSC,
-      QPS: QPS,
-    };
-
-    // Return the URL as the response
-    return res.status(200).send(responseJson);
-
-    // async function uploadFileToStorage(localFilePath, destinationPath) {
-    //   try {
-    //     const bucket = firebase.storage().bucket();
-    //     await bucket.upload(localFilePath, {
-    //       destination: destinationPath,
-    //     });
-    //     console.log("File uploaded successfully!");
-    //   } catch (error) {
-    //     console.error("Error uploading file:", error);
-    //   }
-    // }
-
-    // const localFilePath =
-    //   "/Users/kumarsashank/Github/Testing-Portal/backend/controllers/data.csv";
-    // const destinationPath = "Question_Papers/data.csv";
-
-    // uploadFileToStorage(localFilePath, destinationPath);
-
-    // Process uploaded file, save to database, etc.
-    // try {
-    //   // Upload file to Firebase Storage
-    //   const bucket = firebase.storage().bucket();
-    //   const fileUpload = bucket.file(file.originalname);
-    //   const fileStream = fileUpload.createWriteStream({
-    //     metadata: {
-    //       contentType: file.mimetype,
-    //     },
-    //   });
-
-    //   fileStream.on("error", (error) => {
-    //     console.error("Error uploading file to Firebase Storage:", error);
-    //     res.status(500).send("Error uploading file to Firebase Storage");
-    //   });
-
-    //   fileStream.on("finish", async () => {
-    //     try {
-    //       // Get the uploaded file link
-    //       const [url] = await fileUpload.getSignedUrl({
-    //         action: "read",
-    //         expires: "01-01-3000",
-    //       });
-
-    //       // Get the current date
-    //       const currentDate = new Date();
-
-    //       // Format the date as needed (e.g., YYYY-MM-DD)
-    //       const formattedDate = currentDate.toISOString().split("T")[0]; // Get date in YYYY-MM-DD format
-
-    //       // Combine the name with the formatted date
-    //       const nameWithDate = QPS + "-" + formattedDate;
-
-    //       // Store the link in a Firestore collection
-    //       const sscDoc = await firestore.collection("SSC").doc(SSC).get();
-    //       const qpsDoc = await sscDoc.ref.collection("QPS").doc(QPS).get();
-
-    //       //Need to check the question was already uploaded or not
-
-    //       await qpsDoc.ref.collection("questionpapers").doc(nameWithDate).set({
-    //         createdAt: new Date(),
-    //         filename: file.originalname,
-    //         url: url,
-    //       });
-
-    //       res.send("File uploaded successfully to Firebase Storage.");
-    //     } catch (error) {
-    //       console.error("Error storing file link in Firestore:", error);
-    //       res.status(500).send("Error storing file link in Firestore");
-    //     }
-    //   });
-
-    //   fileStream.end(file.buffer);
-
-    //   //get the uploaded file link
-    // } catch (error) {
-    //   console.error("Error uploading file:", error);
-    //   res.status(500).send("Internal Server Error");
-    // }
-    // For example, you can save the file data to the database using dbModule
-    // Assuming dbModule has a method saveFile to save file data to the database
-
-    // res.send("File uploaded successfully.");
+    return res.status(200).json(responseJson);
   } catch (error) {
     console.error("Error uploading file:", error);
     res.status(500).send("Internal Server Error");
