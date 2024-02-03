@@ -174,6 +174,8 @@ module.exports.adminSignin = async (req, res) => {
     if (adminDoc.exists) {
       const adminData = adminDoc.data();
       console.log(adminData);
+      console.log(username);
+      console.log(password);
       // Extract the fields from the document
       if (adminData.username == username && adminData.password == password) {
         // Create a session ID to represent this user's logged-in status
@@ -186,7 +188,7 @@ module.exports.adminSignin = async (req, res) => {
         // Respond with the session ID
         res.send({ sessionId });
       } else {
-        res.send("Incorrect username or password");
+        res.status(401).send("Incorrect username or password");
       }
     } else {
       res.status(404).send("Document 'Admin' not found");
