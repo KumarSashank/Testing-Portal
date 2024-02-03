@@ -17,7 +17,7 @@ async function uploadQuestionPapers(file, SSC, QPS) {
 
   await uploadQuestionPaperData(nameWithDate, SSC, data);
 
-  const url = await uploadFileToStorage(file);
+  const url = await uploadFileToStorage(file, "Question_Papers");
   const questionPaperRef = await getQuestionPaperReference(SSC, QPS);
 
   const questionsCollectionPath = await createQuestionPaperDocument(
@@ -73,9 +73,26 @@ async function uploadQuestionPaperData(nameWithDate, SSC, data) {
   }
 }
 
-async function uploadFileToStorage(file) {
+async function uploadStudentsData(batchid, data, QPS) {
+  try {
+    const batchname = batchid + QPS;
+    const batchref = await firestore.collection("Batches").doc(batchid);
+    var num = 1;
+    for (const student of data) {
+      studentid = batchname + num++;
+      const studentRef = await batchref.collection("students").doc(studentid);
+      await studentRef.set(student);
+      console.log("Student uploaded successfully:", student.Name);
+    }
+  } catch (err) {
+    console.error("Error uploading student:", error);
+    throw error;
+  }
+}
+
+async function uploadFileToStorage(file, folder) {
   const bucket = firebase.storage().bucket();
-  const destinationPath = "Question_Papers/" + file.originalname;
+  const destinationPath = folder + "/" + file.originalname;
   await bucket.upload(file.path, { destination: destinationPath });
   const [url] = await bucket.file(destinationPath).getSignedUrl({
     action: "read",
@@ -137,6 +154,49 @@ module.exports.uploadController = async (req, res) => {
     console.log("Uploaded file deleted successfully.");
 
     return res.status(200).json(responseJson);
+  } catch (error) {
+    console.error("Error uploading file:", error);
+    res.status(500).send("Internal Server Error");
+  }
+};
+
+module.exports.uploadstud = async (req, res) => {
+  try {
+    const file = req.file;
+    if (!file) {
+      return res.status(400).send("No file uploaded.");
+    }
+
+    const { SSC, QPS, qp } = req.body;
+    const workbook = readExcelFile(file);
+    const data = extractDataFromWorkbook(workbook);
+
+    const batchdoc = await firestore
+      .collection("metaData")
+      .doc("batches")
+      .get();
+    var lastbatchNum = batchdoc.data().LastBatchNum;
+    console.log(lastbatchNum);
+
+    var batchid = "B" + ++lastbatchNum;
+    console.log(batchid);
+
+    console.log(lastbatchNum);
+
+    const url = await uploadFileToStorage(file, "students_list");
+
+    await uploadStudentsData(batchid, data, QPS);
+
+    await firestore
+      .collection("metaData")
+      .doc("batches")
+      .update({ LastBatchNum: lastbatchNum });
+
+    // Delete the uploaded file after the total process completed
+    await unlinkAsync(file.path);
+    console.log("Uploaded file deleted successfully.");
+
+    return res.status(200).json(data);
   } catch (error) {
     console.error("Error uploading file:", error);
     res.status(500).send("Internal Server Error");
