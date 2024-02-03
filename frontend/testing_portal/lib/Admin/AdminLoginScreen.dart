@@ -210,6 +210,7 @@ class _AdminLoginScreenState extends State<AdminLoginScreen> {
                       SizedBox(
                         width: 300.0,
                         child: TextField(
+                          obscureText: true,
                           controller: passwordController,
                           decoration: InputDecoration(
                             border: OutlineInputBorder(
