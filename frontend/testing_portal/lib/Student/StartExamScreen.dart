@@ -55,6 +55,8 @@ class _StartExamScreenState extends State<StartExamScreen> {
                               SizedBox(width: 25.0,),
                               IconButton(onPressed: () {}, icon: Icon(CupertinoIcons.bell, color: Colors.black, size: 30.0,),),
                               SizedBox(width: 25.0,),
+                              IconButton(onPressed: () {}, icon: Icon(CupertinoIcons.headphones, color: Colors.black, size: 30.0,),),
+                              SizedBox(width: 25.0,),
                               IconButton(onPressed: () {}, icon: Icon(CupertinoIcons.gear_big, color: Colors.black, size: 30.0,),),
                               SizedBox(width: 25.0,),
                               IconButton(onPressed: () {}, icon: Icon(CupertinoIcons.person_circle, color: Colors.redAccent, size: 30.0,),)
