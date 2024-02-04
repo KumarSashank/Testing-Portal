@@ -1,3 +1,4 @@
+import 'package:testing_portal/Admin/UploadQP.dart';
 import 'package:testing_portal/main.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
@@ -16,6 +17,7 @@ import 'package:testing_portal/Admin/AdminResults.dart';
 import 'package:testing_portal/Admin/AdminQuestionPapers.dart';
 import 'package:testing_portal/Admin/AdminQuestions.dart';
 import 'package:testing_portal/Admin/AdminMasters.dart';
+import 'package:testing_portal/Admin/UploadQP.dart';
 
 class AdminQuestionPapers extends StatefulWidget {
   const AdminQuestionPapers({Key? key}) : super(key: key);
@@ -959,8 +961,11 @@ class _AdminQuestionPapersState extends State<AdminQuestionPapers> {
                         SizedBox(width: 520.0,),
                         ElevatedButton(
                           onPressed: () {
-                            // _showPopup(context);
-
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(builder: (context) =>
+                                  UploadQP()),
+                            );
                           },
                           style: ButtonStyle(
                             shape: MaterialStateProperty.all(
