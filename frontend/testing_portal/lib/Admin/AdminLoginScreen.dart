@@ -259,7 +259,8 @@ class _AdminLoginScreenState extends State<AdminLoginScreen> {
                               ),
                               primary: Colors.redAccent,
                             ),
-                            onPressed: () async {
+                            onPressed: ()
+                          async {
                               // Call fetchData and wait for it to complete
                               // await fetchData();
                               final response = await http.post(
