@@ -859,7 +859,7 @@ class _AdminAssessorsState extends State<AdminAssessors> {
                                 child: Column(
                                   children: [
                                     SizedBox(height: 20.0,),
-                                    Text('Sector Skill Council:',
+                                    Text('Qualification Pack:',
                                       style: GoogleFonts.poppins(textStyle: TextStyle(fontSize: 21, fontWeight: FontWeight.w600, letterSpacing: 0.2, color: Colors.black),
                                       ),),
                                     SizedBox(height: 20.0,),
@@ -887,7 +887,7 @@ class _AdminAssessorsState extends State<AdminAssessors> {
                                             child: Row(
                                               mainAxisAlignment: MainAxisAlignment.start,
                                               children: [
-                                                Text('Select Sector Skill Council',
+                                                Text('Select Qualification Pack',
                                                   style: GoogleFonts.poppins(textStyle: TextStyle(fontSize: 14, fontWeight: FontWeight.w400, letterSpacing: 0.2, color: Colors.black),
                                                   ),),
                                                 SizedBox(width: 20.0,),
@@ -905,6 +905,90 @@ class _AdminAssessorsState extends State<AdminAssessors> {
                           ),
                         ),
                       ),
+                    ),
+                    SizedBox(height: 40.0,),
+                    Row(
+                      children: [
+                        SizedBox(
+                          width: 800.0,
+                        ),
+                        ElevatedButton(
+                          onPressed: () {},
+                          style: ButtonStyle(
+                            shape: MaterialStateProperty.all(
+                                RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(5.0),
+                                )),
+                            backgroundColor:
+                            MaterialStatePropertyAll(Colors.white60),
+                          ),
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.start,
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Text(
+                                'Export',
+                                style: GoogleFonts.poppins(
+                                  textStyle: TextStyle(
+                                      fontSize: 14,
+                                      fontWeight: FontWeight.w400,
+                                      letterSpacing: 0.2,
+                                      color: Colors.redAccent),
+                                ),
+                              ),
+                              SizedBox(
+                                width: 40.0,
+                              ),
+                              Icon(
+                                CupertinoIcons.chevron_up_chevron_down,
+                                color: Colors.redAccent,
+                                size: 18.0,
+                              )
+                            ],
+                          ),
+                        ),
+                        SizedBox(
+                          width: 10.0,
+                        ),
+                        ElevatedButton(
+                          onPressed: () {
+                            // _showPopup(context);
+
+                          },
+                          style: ButtonStyle(
+                            shape: MaterialStateProperty.all(
+                                RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(5.0),
+                                )),
+                            backgroundColor:
+                            MaterialStatePropertyAll(Colors.redAccent),
+                          ),
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.start,
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Text(
+                                'Add New Assessors',
+                                style: GoogleFonts.poppins(
+                                  textStyle: TextStyle(
+                                      fontSize: 14,
+                                      fontWeight: FontWeight.w400,
+                                      letterSpacing: 0.2,
+                                      color: Colors.white),
+                                ),
+                              ),
+                              SizedBox(
+                                width: 10.0,
+                              ),
+                              Icon(
+                                CupertinoIcons.plus_circle,
+                                color: Colors.white,
+                                size: 18.0,
+                              )
+                            ],
+                          ),
+                        ),
+                      ],
                     ),
                   ],
                 ),

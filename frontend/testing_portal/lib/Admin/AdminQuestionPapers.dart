@@ -807,6 +807,196 @@ class _AdminQuestionPapersState extends State<AdminQuestionPapers> {
                         ],
                       ),
                     ),
+                    Text('Question Papers',
+                      style: GoogleFonts.poppins(textStyle: TextStyle(fontSize: 21, fontWeight: FontWeight.w600, letterSpacing: 0.2, color: Colors.black),
+                      ),),
+                    SizedBox(height: 50.0,),
+                    Center(
+                      child: Container(
+                        height: 180.0,
+                        width: 850.0,
+                        child: Card(
+                          color: Colors.white,
+                          surfaceTintColor: Colors.white,
+                          child: Column(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            crossAxisAlignment: CrossAxisAlignment.center,
+                            children: [
+                              Row(
+                                children: [
+                                  IntrinsicWidth(
+                                    child: Column(
+                                      children: [
+                                        SizedBox(height: 20.0,),
+                                        Row(
+                                          children: [
+                                            SizedBox(width: 50.0,),
+                                            SizedBox(
+                                              width: 270.0,
+                                              height: 40.0,
+                                              child: ElevatedButton(onPressed: () {},
+                                                style: ButtonStyle(
+                                                  side: MaterialStatePropertyAll(BorderSide(
+                                                    width: 0.7,
+                                                    color: Colors.black,
+                                                  ),
+                                                  ),
+                                                  surfaceTintColor: MaterialStatePropertyAll(Colors.white),
+                                                  overlayColor: MaterialStatePropertyAll(Colors.white),
+                                                  foregroundColor: MaterialStatePropertyAll(Colors.white),
+                                                  shape: MaterialStateProperty.all(RoundedRectangleBorder(
+                                                    borderRadius: BorderRadius.circular(5.0),
+                                                  )),
+                                                  backgroundColor: MaterialStatePropertyAll(Colors.white),
+                                                ),
+                                                child: Row(
+                                                  mainAxisAlignment: MainAxisAlignment.start,
+                                                  children: [
+                                                    Text('Select Sector Skill Council',
+                                                      style: GoogleFonts.poppins(textStyle: TextStyle(fontSize: 14, fontWeight: FontWeight.w400, letterSpacing: 0.2, color: Colors.black),
+                                                      ),),
+                                                    SizedBox(width: 20.0,),
+                                                    Icon(CupertinoIcons.chevron_up_chevron_down, color: Colors.black,size: 18.0,)
+                                                  ],
+                                                ),
+                                              ),
+                                            ),
+                                          ],
+                                        ),
+                                      ],
+                                    ),
+                                  ),
+                                  SizedBox(width: 100.0,),
+                                  IntrinsicWidth(
+                                    child: Column(
+                                      children: [
+                                        SizedBox(height: 20.0,),
+                                        Row(
+                                          children: [
+                                            SizedBox(width: 50.0,),
+                                            SizedBox(
+                                              width: 270.0,
+                                              height: 40.0,
+                                              child: ElevatedButton(onPressed: () {},
+                                                style: ButtonStyle(
+                                                  side: MaterialStatePropertyAll(BorderSide(
+                                                    width: 0.7,
+                                                    color: Colors.black,
+                                                  ),
+                                                  ),
+                                                  surfaceTintColor: MaterialStatePropertyAll(Colors.white),
+                                                  overlayColor: MaterialStatePropertyAll(Colors.white),
+                                                  foregroundColor: MaterialStatePropertyAll(Colors.white),
+                                                  shape: MaterialStateProperty.all(RoundedRectangleBorder(
+                                                    borderRadius: BorderRadius.circular(5.0),
+                                                  )),
+                                                  backgroundColor: MaterialStatePropertyAll(Colors.white),
+                                                ),
+                                                child: Row(
+                                                  mainAxisAlignment: MainAxisAlignment.start,
+                                                  children: [
+                                                    Text('Select Qualification Pack',
+                                                      style: GoogleFonts.poppins(textStyle: TextStyle(fontSize: 14, fontWeight: FontWeight.w400, letterSpacing: 0.2, color: Colors.black),
+                                                      ),),
+                                                    SizedBox(width: 20.0,),
+                                                    Icon(CupertinoIcons.chevron_up_chevron_down, color: Colors.black,size: 18.0,)
+                                                  ],
+                                                ),
+                                              ),
+                                            ),
+                                          ],
+                                        ),
+                                      ],
+                                    ),
+                                  ),
+                                ],
+                              ),
+                              SizedBox(height: 20.0,),
+                              Row(
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                crossAxisAlignment: CrossAxisAlignment.center,
+                                children: [
+                                  SizedBox(
+                                    width: 283.0,
+                                    height: 40.0,
+                                    child: ElevatedButton(onPressed: () {},
+                                      style: ButtonStyle(
+                                        side: MaterialStatePropertyAll(BorderSide(
+                                          width: 0.7,
+                                          color: Colors.black,
+                                        ),
+                                        ),
+                                        surfaceTintColor: MaterialStatePropertyAll(Colors.white),
+                                        overlayColor: MaterialStatePropertyAll(Colors.white),
+                                        foregroundColor: MaterialStatePropertyAll(Colors.white),
+                                        shape: MaterialStateProperty.all(RoundedRectangleBorder(
+                                          borderRadius: BorderRadius.circular(5.0),
+                                        )),
+                                        backgroundColor: MaterialStatePropertyAll(Colors.white),
+                                      ),
+                                      child: Row(
+                                        mainAxisAlignment: MainAxisAlignment.start,
+                                        children: [
+                                          Text('Select Question Paper Type',
+                                            style: GoogleFonts.poppins(textStyle: TextStyle(fontSize: 14, fontWeight: FontWeight.w400, letterSpacing: 0.2, color: Colors.black),
+                                            ),),
+                                          SizedBox(width: 20.0,),
+                                          Icon(CupertinoIcons.chevron_up_chevron_down, color: Colors.black,size: 18.0,)
+                                        ],
+                                      ),
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            ],
+                          ),
+                        ),
+                      ),
+                    ),
+                    SizedBox(height: 10.0,),
+                    Row(
+                      children: [
+                        SizedBox(width: 520.0,),
+                        ElevatedButton(
+                          onPressed: () {
+                            // _showPopup(context);
+
+                          },
+                          style: ButtonStyle(
+                            shape: MaterialStateProperty.all(
+                                RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(5.0),
+                                )),
+                            backgroundColor:
+                            MaterialStatePropertyAll(Colors.redAccent),
+                          ),
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.start,
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Text(
+                                'Upload New',
+                                style: GoogleFonts.poppins(
+                                  textStyle: TextStyle(
+                                      fontSize: 14,
+                                      fontWeight: FontWeight.w400,
+                                      letterSpacing: 0.2,
+                                      color: Colors.white),
+                                ),
+                              ),
+                              SizedBox(
+                                width: 10.0,
+                              ),
+                              Icon(
+                                CupertinoIcons.cloud_upload,
+                                color: Colors.white,
+                                size: 18.0,
+                              )
+                            ],
+                          ),
+                        ),
+                      ],
+                    ),
                   ],
                 ),
               ),

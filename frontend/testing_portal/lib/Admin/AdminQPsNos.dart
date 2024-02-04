@@ -800,7 +800,204 @@ class _AdminQPsNosState extends State<AdminQPsNos> {
                       ),
                     ),
 
+                    SizedBox(height: 60.0,),
+                    Column(
+                      mainAxisAlignment: MainAxisAlignment.start,
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(' QPS & NOS ',
+                          style: GoogleFonts.poppins(textStyle: TextStyle(fontSize: 22, fontWeight: FontWeight.w600, letterSpacing: 0.2, color: Colors.black),
+                          ),),
+                        SizedBox(height: 20.0,),
+                        SizedBox(
+                          width: 270.0,
+                          height: 40.0,
+                          child: ElevatedButton(onPressed: () {},
+                            style: ButtonStyle(
+                              side: MaterialStatePropertyAll(BorderSide(
+                                width: 0.7,
+                                color: Colors.black,
+                              ),
+                              ),
+                              surfaceTintColor: MaterialStatePropertyAll(Colors.white),
+                              overlayColor: MaterialStatePropertyAll(Colors.white),
+                              foregroundColor: MaterialStatePropertyAll(Colors.white),
+                              shape: MaterialStateProperty.all(RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(5.0),
+                              )),
+                              backgroundColor: MaterialStatePropertyAll(Colors.white),
+                            ),
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.start,
+                              children: [
+                                Text('Select Category',
+                                  style: GoogleFonts.poppins(textStyle: TextStyle(fontSize: 14, fontWeight: FontWeight.w400, letterSpacing: 0.2, color: Colors.black),
+                                  ),),
+                                SizedBox(width: 89.0,),
+                                Icon(CupertinoIcons.chevron_up_chevron_down, color: Colors.black,size: 18.0,)
+                              ],
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
+                    SizedBox(height: 60.0,),
+                    Column(
+                      mainAxisAlignment: MainAxisAlignment.start,
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(' Sector Skill Council ',
+                          style: GoogleFonts.poppins(textStyle: TextStyle(fontSize: 22, fontWeight: FontWeight.w600, letterSpacing: 0.2, color: Colors.black),
+                          ),),
+                        SizedBox(height: 20.0,),
+                        SizedBox(
+                          width: 270.0,
+                          height: 40.0,
+                          child: ElevatedButton(onPressed: () {},
+                            style: ButtonStyle(
+                              side: MaterialStatePropertyAll(BorderSide(
+                                width: 0.7,
+                                color: Colors.black,
+                              ),
+                              ),
+                              surfaceTintColor: MaterialStatePropertyAll(Colors.white),
+                              overlayColor: MaterialStatePropertyAll(Colors.white),
+                              foregroundColor: MaterialStatePropertyAll(Colors.white),
+                              shape: MaterialStateProperty.all(RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(5.0),
+                              )),
+                              backgroundColor: MaterialStatePropertyAll(Colors.white),
+                            ),
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.start,
+                              children: [
+                                Text('Select Sector Skill Council',
+                                  style: GoogleFonts.poppins(textStyle: TextStyle(fontSize: 14, fontWeight: FontWeight.w400, letterSpacing: 0.2, color: Colors.black),
+                                  ),),
+                                SizedBox(width: 20.0,),
+                                Icon(CupertinoIcons.chevron_up_chevron_down, color: Colors.black,size: 18.0,)
+                              ],
+                            ),
+                          ),
+                        ),
+                        SizedBox(height: 30.0,),
+                        Row(
+                          children: [
+                            SizedBox(width: 700.0,),
+                            ElevatedButton(
+                              onPressed: () {},
+                              style: ButtonStyle(
+                                shape: MaterialStateProperty.all(
+                                    RoundedRectangleBorder(
+                                      borderRadius: BorderRadius.circular(5.0),
+                                    )),
+                                backgroundColor:
+                                MaterialStatePropertyAll(Colors.white60),
+                              ),
+                              child: Row(
+                                mainAxisAlignment: MainAxisAlignment.start,
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Text(
+                                    'Export',
+                                    style: GoogleFonts.poppins(
+                                      textStyle: TextStyle(
+                                          fontSize: 14,
+                                          fontWeight: FontWeight.w400,
+                                          letterSpacing: 0.2,
+                                          color: Colors.redAccent),
+                                    ),
+                                  ),
+                                  SizedBox(
+                                    width: 40.0,
+                                  ),
+                                  Icon(
+                                    CupertinoIcons.chevron_up_chevron_down,
+                                    color: Colors.redAccent,
+                                    size: 18.0,
+                                  )
+                                ],
+                              ),
+                            ),
+                            SizedBox(
+                              width: 10.0,
+                            ),
+                            ElevatedButton(
+                              onPressed: () {
+                                // _showPopup(context);
 
+                              },
+                              style: ButtonStyle(
+                                shape: MaterialStateProperty.all(
+                                    RoundedRectangleBorder(
+                                      borderRadius: BorderRadius.circular(5.0),
+                                    )),
+                                backgroundColor:
+                                MaterialStatePropertyAll(Colors.redAccent),
+                              ),
+                              child: Row(
+                                mainAxisAlignment: MainAxisAlignment.start,
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Text(
+                                    'Add New SSC',
+                                    style: GoogleFonts.poppins(
+                                      textStyle: TextStyle(
+                                          fontSize: 14,
+                                          fontWeight: FontWeight.w400,
+                                          letterSpacing: 0.2,
+                                          color: Colors.white),
+                                    ),
+                                  ),
+                                  SizedBox(
+                                    width: 10.0,
+                                  ),
+                                  Icon(
+                                    CupertinoIcons.plus_circle,
+                                    color: Colors.white,
+                                    size: 18.0,
+                                  )
+                                ],
+                              ),
+                            ),
+                            SizedBox(
+                              width: 10.0,
+                            ),
+                            ElevatedButton(
+                              onPressed: () {
+                                // _showPopup(context);
+
+                              },
+                              style: ButtonStyle(
+                                shape: MaterialStateProperty.all(
+                                    RoundedRectangleBorder(
+                                      borderRadius: BorderRadius.circular(5.0),
+                                    )),
+                                backgroundColor:
+                                MaterialStatePropertyAll(Colors.redAccent),
+                              ),
+                              child: Row(
+                                mainAxisAlignment: MainAxisAlignment.start,
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Text(
+                                    'Upload NOS & PC',
+                                    style: GoogleFonts.poppins(
+                                      textStyle: TextStyle(
+                                          fontSize: 14,
+                                          fontWeight: FontWeight.w400,
+                                          letterSpacing: 0.2,
+                                          color: Colors.white),
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            ),
+
+                          ],
+                        ),
+                      ],
+                    ),
                   ],
                 ),
               ),
