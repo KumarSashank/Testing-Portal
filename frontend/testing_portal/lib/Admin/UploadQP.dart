@@ -17,7 +17,7 @@ import 'package:testing_portal/Admin/AdminQuestionPapers.dart';
 import 'package:testing_portal/Admin/AdminQuestions.dart';
 import 'package:testing_portal/Admin/AdminMasters.dart';
 import 'package:file_picker/file_picker.dart';
-import 'package:file_selector/file_selector.dart'
+import 'package:file_selector/file_selector.dart';
 
 class UploadQP extends StatefulWidget {
   const UploadQP({Key? key}) : super(key: key);
