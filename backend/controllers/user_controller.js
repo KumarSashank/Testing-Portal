@@ -57,12 +57,11 @@ module.exports.createSSC = async (req, res) => {
       // const user = userCredential.user;
       // console.log(userCredential);
       await firestore.collection("SSC").doc(SSC_code).set({
-        email: email,
+        // email: email,
         createdAt: new Date(),
         role: "SSC",
-        userId: userCredential.uid,
-        username: username,
-        password: password,
+        // username: username,
+        // password: password,
         Skill_council_name: Skill_council_name,
       });
 
