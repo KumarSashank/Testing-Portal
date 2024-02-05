@@ -59,3 +59,28 @@ module.exports.createNOS = async (req, res) => {
     res.send("Only Admin can create NOS");
   }
 };
+
+module.exports.getSSC = async (req, res) => {
+  const { SSC_code } = req.body;
+  try {
+    const sscDoc = await firestore.collection("SSC").doc(SSC_code).get();
+    res.send(sscDoc.data());
+  } catch (error) {
+    console.error("Error getting SSC:", error);
+    res.status(500).send("An error occurred while getting SSC.");
+  }
+};
+
+module.exports.getAllSSC = async (req, res) => {
+  try {
+    const sscDoc = await firestore.collection("SSC").get();
+    let ssc = [];
+    sscDoc.forEach((doc) => {
+      ssc.push(doc.data().Skill_council_name);
+    });
+    res.send(ssc);
+  } catch (error) {
+    console.error("Error getting SSC:", error);
+    res.status(500).send("An error occurred while getting SSC.");
+  }
+};
