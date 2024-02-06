@@ -138,7 +138,7 @@ packages:
     source: hosted
     version: "2.6.2"
   file_selector_web:
-    dependency: transitive
+    dependency: "direct main"
     description:
       name: file_selector_web
       sha256: c0f025d460de3301b7bbbf837fc8d0759df85f182c635f1dd94934b4cdc92352

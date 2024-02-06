@@ -15,6 +15,9 @@ import 'package:testing_portal/Admin/AdminResults.dart';
 import 'package:testing_portal/Admin/AdminQuestionPapers.dart';
 import 'package:testing_portal/Admin/AdminQuestions.dart';
 import 'package:testing_portal/Admin/AdminMasters.dart';
+import 'package:http/http.dart' as http;
+import 'dart:convert';
+
 
 class AdminSectorSkillCouncils extends StatefulWidget {
   const AdminSectorSkillCouncils({Key? key}) : super(key: key);
@@ -27,6 +30,37 @@ class AdminSectorSkillCouncils extends StatefulWidget {
 class _AdminSectorSkillCouncilsState extends State<AdminSectorSkillCouncils> {
   TextEditingController _sscnameController = TextEditingController();
   TextEditingController _codeController = TextEditingController();
+  bool _isSaving = true;
+  Future fetchData() async {
+    final response = await http.post(
+      Uri.parse('http://localhost:8000/createSSC'),
+      headers: <String, String>{
+        'Content-Type': 'application/json; charset=UTF-8',
+      },
+      body: jsonEncode(
+        <String, String>{
+          'sscname': _sscnameController.text,
+          'code': _codeController.text,
+        },
+      ),
+    );
+  }
+
+  Future<void> _login() async {
+    setState(() {
+      _isSaving = true;
+    });
+    final String apiUrl = 'http://localhost:8000/createSSC';
+
+    final Map<String, String> data = {
+      'sscname': _sscnameController.text,
+      'code': _codeController.text,
+    };
+
+    setState(() {
+      _isSaving = false;
+    });
+  }
   bool hover = true;
   @override
   Widget build(BuildContext context) {
@@ -1162,7 +1196,7 @@ class PopupCard extends StatelessWidget {
                           SizedBox(width: 10.0,),
                           Expanded(
                             child: TextField(
-                              // controller: _sscnameController,
+                              controller: _sscnameController,
                               decoration: InputDecoration(
                                 border: OutlineInputBorder(
                                     borderRadius: BorderRadius.circular(10.0)),
@@ -1196,7 +1230,7 @@ class PopupCard extends StatelessWidget {
                           Expanded(
                             child:
                             TextField(
-                            // controller: _codeController,
+                            controller: _codeController,
                             decoration: InputDecoration(
                               border: OutlineInputBorder(
                                   borderRadius: BorderRadius.circular(10.0)),
@@ -1233,8 +1267,50 @@ class PopupCard extends StatelessWidget {
                           ),
                           primary: Colors.redAccent,
                         ),
-                        onPressed: () {
-                        },
+                        onPressed: ()
+                        async {
+                          // Call fetchData and wait for it to complete
+                          // await fetchData();
+                          final response = await http.post(
+                            Uri.parse('http://localhost:8000/createSSC'),
+                            headers: <String, String>{
+                              'Content-Type':
+                              'application/json; charset=UTF-8',
+                            },
+                          );
+                          print(response.body);
+                          print(response.statusCode);
+                          if (response.statusCode == 200) {
+                            // Navigate to the next screen (replace with your navigation logic)
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                  builder: (context) =>
+                                    const AdminSectorSkillCouncils()),
+                            );
+                          } else {
+                            // Show error message to the user (replace with your UI logic)
+                            showDialog(
+                              context: context,
+                              builder: (BuildContext context) {
+                                return AlertDialog(
+                                  title: Text('SSC Upload Failed'),
+                                  content: Text(
+                                      ''),
+                                  actions: [
+                                    TextButton(
+                                      onPressed: () {
+                                        Navigator.of(context)
+                                            .pop(); // Close the dialog
+                                      },
+                                      child: Text('OK'),
+                                    ),
+                                  ],
+                                );
+                              },
+                            );
+                          }
+                        }
                       ),
                       SizedBox(width: 58.0,),
                       ElevatedButton(
