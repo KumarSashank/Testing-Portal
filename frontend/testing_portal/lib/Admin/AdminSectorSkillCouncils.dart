@@ -1,3 +1,4 @@
+import 'dart:core';
 import 'package:testing_portal/main.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
@@ -18,7 +19,6 @@ import 'package:testing_portal/Admin/AdminMasters.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
 
-
 class AdminSectorSkillCouncils extends StatefulWidget {
   const AdminSectorSkillCouncils({Key? key}) : super(key: key);
 
@@ -26,6 +26,9 @@ class AdminSectorSkillCouncils extends StatefulWidget {
   State<AdminSectorSkillCouncils> createState() =>
       _AdminSectorSkillCouncilsState();
 }
+
+TextEditingController _sscnameController = TextEditingController();
+TextEditingController _codeController = TextEditingController();
 
 class _AdminSectorSkillCouncilsState extends State<AdminSectorSkillCouncils> {
   TextEditingController _sscnameController = TextEditingController();
@@ -1093,7 +1096,6 @@ class _AdminSectorSkillCouncilsState extends State<AdminSectorSkillCouncils> {
                         ElevatedButton(
                           onPressed: () {
                             _showPopup(context);
-
                           },
                           style: ButtonStyle(
                             shape: MaterialStateProperty.all(
@@ -1171,20 +1173,27 @@ class PopupCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return AlertDialog(
-      title: Text('Add New SSC',
-        style: GoogleFonts.poppins( textStyle: TextStyle(fontSize: 14,letterSpacing: 1.0,
-          color: Colors.black,
-          fontWeight: FontWeight.w600,),
-        ),),
+      title: Text(
+        'Add New SSC',
+        style: GoogleFonts.poppins(
+          textStyle: TextStyle(
+            fontSize: 14,
+            letterSpacing: 1.0,
+            color: Colors.black,
+            fontWeight: FontWeight.w600,
+          ),
+        ),
+      ),
       content: SizedBox(
         height: 1.0,
       ),
       actions: [
         SizedBox(
           width: 250.0,
-          height:165.0,
-          child:
-              Column(
+          height: 165.0,
+          child: Column(
+            children: [
+              Row(
                 children: [
                       Row(
                         children: [
@@ -1251,15 +1260,37 @@ class PopupCard extends StatelessWidget {
                           ),
                         ],
                       ),
-                  SizedBox(height: 20.0,),
-                  Row(
-                    children: [
-                      ElevatedButton(
-                        child: Text(
-                          ' Save ',
-                          style: GoogleFonts.poppins(
-                            textStyle: TextStyle(fontSize: 12, letterSpacing: 0.5, color: Colors.white),
-                          ),
+                  Text(
+                    'SSC Name: ',
+                    style: GoogleFonts.poppins(
+                      textStyle: TextStyle(
+                        fontSize: 12,
+                        letterSpacing: 1.0,
+                        color: Colors.black,
+                        fontWeight: FontWeight.w600,
+                      ),
+                    ),
+                  ),
+                  SizedBox(
+                    width: 10.0,
+                  ),
+                  Expanded(
+                    child: TextField(
+                      controller: _sscnameController,
+                      decoration: InputDecoration(
+                        border: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(10.0)),
+                        hintText: 'Add SSC Name',
+                        filled: true,
+                        fillColor: Colors.redAccent.withOpacity(0.1),
+                        hoverColor: Colors.grey.shade100,
+                      ),
+                      style: GoogleFonts.poppins(
+                        textStyle: TextStyle(
+                          fontSize: 12,
+                          letterSpacing: 1.0,
+                          color: Colors.black,
+                          fontWeight: FontWeight.w600,
                         ),
                         style: ElevatedButton.styleFrom(
                           shape: RoundedRectangleBorder(
@@ -1312,38 +1343,132 @@ class PopupCard extends StatelessWidget {
                           }
                         }
                       ),
-                      SizedBox(width: 58.0,),
-                      ElevatedButton(
-                        child: Text(
-                          ' Cancel  ',
-                          style: GoogleFonts.poppins(
-                            textStyle: TextStyle(fontSize: 12, letterSpacing: 0.5, color: Colors.white),
-                          ),
-                        ),
-                        style: ElevatedButton.styleFrom(
-                          shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(8.0),
-                          ),
-                          primary: Colors.redAccent,
-                        ),
-                        onPressed: () {
-                          Navigator.of(context).pop(
-                            MaterialPageRoute(builder: (context) => const AdminSectorSkillCouncils()),
-                          );
-                        },
-                      ),
-
-                    ],
+                    ),
                   ),
                 ],
               ),
-
-
+              SizedBox(
+                height: 10.0,
+              ),
+              Row(
+                children: [
+                  Text(
+                    'SSC Code: ',
+                    style: GoogleFonts.poppins(
+                      textStyle: TextStyle(
+                        fontSize: 12,
+                        letterSpacing: 1.0,
+                        color: Colors.black,
+                        fontWeight: FontWeight.w600,
+                      ),
+                    ),
+                  ),
+                  SizedBox(
+                    width: 12.0,
+                  ),
+                  Expanded(
+                    child: TextField(
+                      controller: _codeController,
+                      decoration: InputDecoration(
+                        border: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(10.0)),
+                        hintText: 'Add SSC Code',
+                        filled: true,
+                        fillColor: Colors.redAccent.withOpacity(0.1),
+                        hoverColor: Colors.grey.shade100,
+                      ),
+                      style: GoogleFonts.poppins(
+                        textStyle: TextStyle(
+                          fontSize: 12,
+                          letterSpacing: 1.0,
+                          color: Colors.black,
+                          fontWeight: FontWeight.w600,
+                        ),
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+              SizedBox(
+                height: 20.0,
+              ),
+              Row(
+                children: [
+                  ElevatedButton(
+                    child: Text(
+                      ' Save ',
+                      style: GoogleFonts.poppins(
+                        textStyle: TextStyle(
+                            fontSize: 12,
+                            letterSpacing: 0.5,
+                            color: Colors.white),
+                      ),
+                    ),
+                    style: ElevatedButton.styleFrom(
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(8.0),
+                      ),
+                      primary: Colors.redAccent,
+                    ),
+                    onPressed: () async {
+                      //post request to add new SSC
+                      final response = await http.post(
+                        Uri.parse('http://localhost:8000/createSSC'),
+                        headers: <String, String>{
+                          'Content-Type': 'application/json; charset=UTF-8',
+                        },
+                        body: jsonEncode(
+                          <String, String>{
+                            'adminId': 'ZVbVLz0Jwqhmt13yivVHWhILdbN2',
+                            'Skill_council_name': _sscnameController.text,
+                            'SSC_code': _codeController.text,
+                          },
+                        ),
+                      );
+                      print(_sscnameController.text);
+                      print(_codeController.text);
+                      print('SSC created');
+                      Navigator.of(context).pop(
+                        MaterialPageRoute(
+                            builder: (context) =>
+                                const AdminSectorSkillCouncils()),
+                      );
+                      print(response.body);
+                    },
+                  ),
+                  SizedBox(
+                    width: 58.0,
+                  ),
+                  ElevatedButton(
+                    child: Text(
+                      ' Cancel  ',
+                      style: GoogleFonts.poppins(
+                        textStyle: TextStyle(
+                            fontSize: 12,
+                            letterSpacing: 0.5,
+                            color: Colors.white),
+                      ),
+                    ),
+                    style: ElevatedButton.styleFrom(
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(8.0),
+                      ),
+                      primary: Colors.redAccent,
+                    ),
+                    onPressed: () {
+                      Navigator.of(context).pop(
+                        MaterialPageRoute(
+                            builder: (context) =>
+                                const AdminSectorSkillCouncils()),
+                      );
+                    },
+                  ),
+                ],
+              ),
+            ],
+          ),
         ),
       ],
     );
   }
 }
-
-
-

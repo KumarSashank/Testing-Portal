@@ -1,12 +1,19 @@
 const { Router } = require("express");
-const { createQPS, createNOS } = require("../controllers/ssc_controller");
+const {
+  createQPS,
+  createNOS,
+  getSSC,
+  getAllSSC,
+} = require("../controllers/ssc_controller");
 const router = Router();
 
 router.post("/create_qps", createQPS);
 router.post("/create_nos", createNOS);
+router.get("/getSSC", getSSC);
+router.get("/getAllSSC", getAllSSC);
 
 // router.post("/signup", signupUser); // Route for user signup
-// router.post("/signin/:role", signinUser); // Route for user signin with role parameter
+// router.post("/signin/:role", signinUser); // Route for user sign in with role parameter
 // router.post("/createSSC", createSSC); // Route for creating SSC
 
 router.get("/hello", (req, res) => {
