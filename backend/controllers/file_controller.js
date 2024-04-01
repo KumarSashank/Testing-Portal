@@ -18,10 +18,15 @@ async function uploadQuestionPapers(file, SSC, QPS) {
   const workbook = readExcelFile(file);
   const data = extractDataFromWorkbook(workbook);
 
-  //uploading data to firestore
-  await uploadQuestionPaperData2(QPS, SSC, data);
+  //Getting QP count from uploading question paper data
+  const QPS_paper_count = await uploadQuestionPaperData2(QPS, SSC, data); //uploading data to firestore
 
-  const url = await uploadFileToStorage(file, "Question_Papers");
+  const url = await uploadFileToStorage(
+    file,
+    "Question_Papers",
+    QPS_paper_count,
+    QPS
+  );
   // const questionPaperRef = await getQuestionPaperReference(SSC, QPS);
 
   // const questionsCollectionPath = await createQuestionPaperDocument(
@@ -141,7 +146,11 @@ async function uploadQuestionPaperData2(QPS, SSC, data) {
 
     //updating question paper count
     await qpsRef.update({ question_papers: newpaper });
+    QPS_paper_count = newpaper;
+
     console.log("Count Updated", newpaper);
+
+    return newpaper;
   } catch (error) {
     console.error("Error in operation:", error);
     throw error;
@@ -165,9 +174,13 @@ async function uploadStudentsData(batchid, data, QPS) {
   }
 }
 
-async function uploadFileToStorage(file, folder) {
+async function uploadFileToStorage(file, folder, QPS_paper_count, QPS) {
+  //generating filename
+  const filename = QPS + "-" + QPS_paper_count;
+
+  //uploading file to firebase storage
   const bucket = firebase.storage().bucket();
-  const destinationPath = folder + "/" + file.originalname;
+  const destinationPath = folder + "/" + filename;
   await bucket.upload(file.path, { destination: destinationPath });
   const [url] = await bucket.file(destinationPath).getSignedUrl({
     action: "read",
