@@ -28,6 +28,9 @@ const PORT = process.env.PORT || 8000;
 const route = require("./routes/user_route");
 const ssc_route = require("./routes/ssc_route");
 const file_route = require("./routes/file_route");
+const batch_route = require("./routes/batch_route");
+
+app.use(batch_route);
 app.use(file_route);
 app.use(route);
 app.use(ssc_route);
