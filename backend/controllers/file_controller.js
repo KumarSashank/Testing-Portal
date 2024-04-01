@@ -11,30 +11,32 @@ const unlinkAsync = util.promisify(fs.unlink);
 const firestore = db;
 
 async function uploadQuestionPapers(file, SSC, QPS) {
-  const nameWithDate = generateNameWithDate(QPS);
+  //generating a name for question paper by adding date to QPS
+  // const nameWithDate = generateNameWithDate(QPS);
+
+  //extracting data from excel file
   const workbook = readExcelFile(file);
   const data = extractDataFromWorkbook(workbook);
 
-  await uploadQuestionPaperData(nameWithDate, SSC, data);
+  //uploading data to firestore
+  await uploadQuestionPaperData2(QPS, SSC, data);
 
   const url = await uploadFileToStorage(file, "Question_Papers");
-  const questionPaperRef = await getQuestionPaperReference(SSC, QPS);
+  // const questionPaperRef = await getQuestionPaperReference(SSC, QPS);
 
-  const questionsCollectionPath = await createQuestionPaperDocument(
-    nameWithDate,
-    file.originalname,
-    url,
-    questionPaperRef,
-    SSC,
-    QPS
-  );
+  // const questionsCollectionPath = await createQuestionPaperDocument(
+  //   QPS,
+  //   file.originalname,
+  //   url,
+  //   SSC,
+  //   QPS
+  // );
 
   return {
     url: url,
     filename: file.originalname,
     SSC: SSC,
     QPS: QPS,
-    path: questionsCollectionPath,
   };
 }
 
@@ -62,13 +64,86 @@ async function uploadQuestionPaperData(nameWithDate, SSC, data) {
       qps: nameWithDate,
     });
 
+    //getting ref of question paper
     const qpsRef = firestore.collection("question_papers").doc(nameWithDate);
+
+    //adding questions from data(object array)
     for (const question of data) {
       await qpsRef.collection("questions").add(question);
       console.log("Question uploaded successfully:", question.Question);
     }
   } catch (error) {
     console.error("Error uploading question:", error);
+    throw error;
+  }
+}
+
+//checking gpt
+async function uploadQuestionPaperData2(QPS, SSC, data) {
+  try {
+    // Reference to the document
+    const qpsRef = firestore.collection("question_papers").doc(QPS);
+    let isNewDocument = false; // Flag to check if the document is newly created
+
+    // Attempt to get the document
+    const doc = await qpsRef.get();
+    console.log(doc);
+
+    if (!doc.exists) {
+      // Document does not exist, so create it and initialize the 'papers' collection if needed
+      await qpsRef.set({
+        updatedAt: new Date(),
+        ssc: SSC,
+        qps: QPS,
+        question_papers: 0,
+      });
+      console.log("Document created with initial data:", QPS);
+      isNewDocument = true;
+    } else {
+      console.log(
+        "Document exists, navigating to 'papers' subcollection:",
+        QPS
+      );
+    }
+
+    // Reference to the 'papers' subcollection within the document
+    const papersRef = qpsRef.collection("papers");
+
+    //get the question_papers value from QPS doc field
+    const QPS_paper_doc = await firestore
+      .collection("question_papers")
+      .doc(QPS)
+      .get();
+
+    //Getting the total papers count
+    console.log(QPS_paper_doc.data().question_papers);
+    const paperNumber = QPS_paper_doc.data().question_papers;
+    let newpaper = paperNumber + 1;
+
+    //adding total questions count in field
+    await papersRef
+      .doc(newpaper.toString())
+      .set({ "Total questions": data.length });
+
+    // Get the reference to the questions subcollection
+    const questionsRef = papersRef
+      .doc(newpaper.toString())
+      .collection("questions");
+
+    let itemId = 1; // Start with an ID of 1
+
+    // Add each question to the 'questions' subcollection
+    for (const question of data) {
+      await questionsRef.doc(itemId.toString()).set(question); // Convert itemId to a string
+      console.log("Question uploaded successfully:", question.Question);
+      itemId++; // Increment the itemId for the next document
+    }
+
+    //updating question paper count
+    await qpsRef.update({ question_papers: newpaper });
+    console.log("Count Updated", newpaper);
+  } catch (error) {
+    console.error("Error in operation:", error);
     throw error;
   }
 }
@@ -101,44 +176,45 @@ async function uploadFileToStorage(file, folder) {
   return url;
 }
 
-async function getQuestionPaperReference(SSC, QPS) {
-  const sscDoc = await firestore.collection("SSC").doc(SSC).get();
-  return sscDoc.ref.collection("QPS").doc(QPS).ref;
-}
+// async function getQuestionPaperReference(SSC, QPS) {
+//   const sscDoc = await firestore.collection("SSC").doc(SSC).get();
+//   return sscDoc.ref.collection("QPS").doc(QPS).ref;
+// }
 
-async function createQuestionPaperDocument(
-  nameWithDate,
-  filename,
-  url,
-  questionPaperRef,
-  SSC,
-  QPS
-) {
-  try {
-    const sscDoc = await firestore.collection("SSC").doc(SSC).get();
-    const qpsDoc = await sscDoc.ref.collection("QPS").doc(QPS).get();
+// async function createQuestionPaperDocument(
+//   nameWithDate,
+//   filename,
+//   url,
+//   questionPaperRef,
+//   SSC,
+//   QPS
+// ) {
+//   try {
+//     const sscDoc = await firestore.collection("SSC").doc(SSC).get();
+//     const qpsDoc = await sscDoc.ref.collection("QPS").doc(QPS).get();
 
-    //Need to check the question was already uploaded or not
-    const questionsCollectionPath = `question_papers/${nameWithDate}/questions`;
+//     //Need to check the question was already uploaded or not
+//     const questionsCollectionPath = `question_papers/${nameWithDate}/questions`;
 
-    await qpsDoc.ref.collection("questionpapers").doc(nameWithDate).set({
-      createdAt: new Date(),
-      filename: filename,
-      url: url,
-      path: questionsCollectionPath,
-    });
+//     await qpsDoc.ref.collection("questionpapers").doc(nameWithDate).set({
+//       createdAt: new Date(),
+//       filename: filename,
+//       url: url,
+//       path: questionsCollectionPath,
+//     });
 
-    // Return the path to the questions collection
-    return questionsCollectionPath;
-  } catch (error) {
-    console.error("Error creating question paper document:", error);
-    throw error;
-  }
-}
+//     // Return the path to the questions collection
+//     return questionsCollectionPath;
+//   } catch (error) {
+//     console.error("Error creating question paper document:", error);
+//     throw error;
+//   }
+// }
 
 module.exports.uploadController = async (req, res) => {
   try {
     const file = req.file;
+    //checking whether file is uploaded to server or not
     if (!file) {
       return res.status(400).send("No file uploaded.");
     }
@@ -147,6 +223,7 @@ module.exports.uploadController = async (req, res) => {
     console.log(SSC);
     console.log(QPS);
 
+    //calling uploadquestionpapers function
     const responseJson = await uploadQuestionPapers(file, SSC, QPS);
 
     // Delete the uploaded file after the total process completed
