@@ -21,12 +21,8 @@ async function uploadQuestionPapers(file, SSC, QPS) {
   //Getting QP count from uploading question paper data
   const QPS_paper_count = await uploadQuestionPaperData2(QPS, SSC, data); //uploading data to firestore
 
-  const url = await uploadFileToStorage(
-    file,
-    "Question_Papers",
-    QPS_paper_count,
-    QPS
-  );
+  const filename = QPS + "-" + QPS_paper_count;
+  const url = await uploadFileToStorage(file, "Question_Papers", filename);
   // const questionPaperRef = await getQuestionPaperReference(SSC, QPS);
 
   // const questionsCollectionPath = await createQuestionPaperDocument(
@@ -174,10 +170,7 @@ async function uploadStudentsData(batchid, data, QPS) {
   }
 }
 
-async function uploadFileToStorage(file, folder, QPS_paper_count, QPS) {
-  //generating filename
-  const filename = QPS + "-" + QPS_paper_count;
-
+async function uploadFileToStorage(file, folder, filename) {
   //uploading file to firebase storage
   const bucket = firebase.storage().bucket();
   const destinationPath = folder + "/" + filename;
@@ -273,7 +266,9 @@ module.exports.uploadstud = async (req, res) => {
 
     console.log(lastbatchNum);
 
-    const url = await uploadFileToStorage(file, "students_list");
+    const filename = batchid + ".xlsx";
+
+    const url = await uploadFileToStorage(file, "students_list", filename);
 
     await uploadStudentsData(batchid, data, QPS);
 
@@ -286,7 +281,7 @@ module.exports.uploadstud = async (req, res) => {
     await unlinkAsync(file.path);
     console.log("Uploaded file deleted successfully.");
 
-    return res.status(200).json(data);
+    return res.status(200).json({ Batch_id: batchid });
   } catch (error) {
     console.error("Error uploading file:", error);
     res.status(500).send("Internal Server Error");
