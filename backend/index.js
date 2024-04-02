@@ -29,7 +29,9 @@ const route = require("./routes/user_route");
 const ssc_route = require("./routes/ssc_route");
 const file_route = require("./routes/file_route");
 const batch_route = require("./routes/batch_route");
+const student_route = require("./routes/student_route");
 
+app.use(student_route);
 app.use(batch_route);
 app.use(file_route);
 app.use(route);
