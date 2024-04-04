@@ -109,3 +109,80 @@ module.exports.getQuestionPaper = async (req, res) => {
     return res.status(500).json({ error: "Internal server error" });
   }
 };
+
+//submitting test
+module.exports.submitTest = async (req, res) => {
+  const { options_selected, studentID, batchID } = req.body;
+
+  try {
+    // Get a reference to the document
+    const studentRef = firestore
+      .collection("Batches")
+      .doc(batchID)
+      .collection("Results")
+      .doc(studentID);
+
+    // Set the data for the document
+    await studentRef.set({
+      // Add any data you want to store for the student
+      // You may want to include additional fields here
+    });
+
+    // Create a reference to the subcollection
+    const optionsSelectedRef = studentRef.collection("options_selected");
+
+    // Iterate through options_selected and add documents to the subcollection
+    for (const option of options_selected) {
+      // Set the document ID based on option.question_num
+      await optionsSelectedRef.doc(option.question_num.toString()).set(option);
+    }
+
+    return res.status(200).json({ success: true });
+  } catch (err) {
+    console.error("Error submitting test:", err);
+    return res.status(500).json({ error: "Internal server error" });
+  }
+};
+
+//process result
+module.exports.processResult = async (req, res) => {
+  const { batchID } = req.body;
+  const totalMarksMap = {}; // Object to store total marks for each student
+
+  try {
+    // Get a reference to the collection of student documents
+    const studentsSnapshot = await firestore
+      .collection("Batches")
+      .doc(batchID)
+      .collection("Results")
+      .get();
+
+    // Iterate through each student's document
+    for (const studentDoc of studentsSnapshot.docs) {
+      let totalMarks = 0;
+
+      // Get a reference to the subcollection 'options_selected' for the current student
+      const optionsSelectedRef = studentDoc.ref.collection("options_selected");
+
+      // Iterate through each document in 'options_selected'
+      const optionsSnapshot = await optionsSelectedRef.get();
+      optionsSnapshot.forEach((optionDoc) => {
+        const optionData = optionDoc.data();
+        // Compare 'option_selected' with 'answer'
+        if (optionData.option_selected === optionData.answer) {
+          // Add marks to totalMarks if 'option_selected' matches 'answer'
+          totalMarks += optionData.marks;
+        }
+      });
+
+      // Store the total marks for the current student
+      totalMarksMap[studentDoc.id] = totalMarks;
+    }
+
+    // Send the total marks map as response
+    return res.status(200).json(totalMarksMap);
+  } catch (error) {
+    console.error("Error processing results:", error);
+    return res.status(500).json({ error: "Internal server error" });
+  }
+};
