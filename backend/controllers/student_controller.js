@@ -173,6 +173,9 @@ module.exports.processResult = async (req, res) => {
           // Add marks to totalMarks if 'option_selected' matches 'answer'
           totalMarks += optionData.marks;
         }
+
+        //pushing the student result to the database
+        const resultRef = studentDoc.ref.set({ totalMarks: totalMarks });
       });
 
       // Store the total marks for the current student
