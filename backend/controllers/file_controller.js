@@ -277,6 +277,24 @@ module.exports.uploadstud = async (req, res) => {
       .doc("batches")
       .update({ LastBatchNum: lastbatchNum });
 
+    try {
+      // Get a reference to the document
+      const batchRef = firestore
+        .collection("SSC")
+        .doc(SSC)
+        .collection("QPS")
+        .doc(QPS);
+
+      // Update the document
+      await batchRef.update({
+        batches: firebase.firestore.FieldValue.arrayUnion(batchid),
+      });
+
+      // Respond with success
+    } catch (error) {
+      console.error("Error adding batchID to the array:", error);
+    }
+
     // Delete the uploaded file after the total process completed
     await unlinkAsync(file.path);
     console.log("Uploaded file deleted successfully.");
