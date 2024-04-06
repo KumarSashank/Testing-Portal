@@ -2,7 +2,6 @@ const express = require("express");
 const cors = require("cors");
 const multer = require("multer");
 const fs = require("fs");
-const cors = require("cors");
 const corsConfig = {
   origin: "*",
   credentials: true,
