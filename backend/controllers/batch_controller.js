@@ -40,3 +40,22 @@ module.exports.assignQPtoBatch = async (req, res) => {
     res.status(500).send("Internal Server Error");
   }
 };
+
+module.exports.getBatchList = async (req, res) => {
+  //get the list of batches for specific qps
+  const { SSC, QPS } = req.body;
+  try {
+    const qpsRef = firestore
+      .collection("SSC")
+      .doc(SSC)
+      .collection("QPS")
+      .doc(QPS);
+    const data = await qpsRef.get();
+    const batches = data.data().batches;
+
+    return res.status(200).json(batches);
+  } catch (e) {
+    console.log(e);
+    res.status(500).send("Internal Server Error");
+  }
+};
