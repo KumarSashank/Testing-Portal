@@ -3,7 +3,7 @@ const router = Router();
 const multer = require("multer");
 const fs = require("fs");
 // const app = express();
-const upload = multer({ dest: "uploads/" });
+const upload = multer({ dest: "/tmp/" });
 const {
   uploadController,
   uploadstud,
