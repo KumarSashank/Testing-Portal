@@ -30,7 +30,7 @@ app.options("", cors(corsConfig));
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
-const PORT = process.env.PORT || 8000;
+const PORT = 8000;
 
 // Define your routes after setting up middleware
 const route = require("./routes/user_route");
