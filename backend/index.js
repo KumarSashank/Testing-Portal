@@ -2,6 +2,13 @@ const express = require("express");
 const cors = require("cors");
 const multer = require("multer");
 const fs = require("fs");
+const cors = require("cors");
+const corsConfig = {
+  origin: "*",
+  credentials: true,
+  methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
+};
+
 require("dotenv").config();
 
 const app = express();
@@ -18,7 +25,8 @@ const upload = multer({ dest: "uploads/" });
 // });
 
 // Use cors middleware before defining routes
-app.use(cors());
+app.use(cors(corsConfig));
+app.options("", cors(corsConfig));
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
