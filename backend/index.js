@@ -11,7 +11,7 @@ const corsConfig = {
 require("dotenv").config();
 
 const app = express();
-const upload = multer({ dest: "uploads/" });
+const upload = multer({ dest: "/tmp/uploads/" });
 
 // app.post("/upload", upload.single("csvFile"), (req, res) => {
 //   // Access uploaded file
