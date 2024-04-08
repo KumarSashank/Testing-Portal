@@ -16,7 +16,6 @@ class _AdminLoginScreenState extends State<AdminLoginScreen> {
   TextEditingController nameController = TextEditingController();
   TextEditingController passwordController = TextEditingController();
   bool _isLoggingIn = true;
-
   Future fetchData() async {
     final response = await http.post(
       Uri.parse('http://localhost:8000/adminSignin'),
