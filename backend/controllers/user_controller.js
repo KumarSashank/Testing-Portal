@@ -45,33 +45,31 @@ module.exports.signupUser = async (req, res) => {
 
 module.exports.createSSC = async (req, res) => {
   console.log("create SSC");
-  const { email, password, username, adminId, Skill_council_name, SSC_code } =
-    req.body;
+  const { password, username, Skill_council_name, SSC_code } = req.body;
 
-  if (adminId == "ZVbVLz0Jwqhmt13yivVHWhILdbN2") {
-    try {
-      // const userCredential = await firebase.auth().createUser({
-      //   email: email,
-      //   password: password,
-      // });
-      // const user = userCredential.user;
-      // console.log(userCredential);
-      await firestore.collection("SSC").doc(SSC_code).set({
-        // email: email,
-        createdAt: new Date(),
-        role: "SSC",
-        // username: username,
-        // password: password,
-        Skill_council_name: Skill_council_name,
-      });
+  try {
+    // const userCredential = await firebase.auth().createUser({
+    //   email: email,
+    //   password: password,
+    // });
+    // const user = userCredential.user;
+    // console.log(userCredential);
+    await firestore.collection("SSC").doc(SSC_code).set({
+      // email: email,
+      createdAt: new Date(),
+      role: "SSC",
+      // username: username,
+      // password: password,
+      Skill_council_name: Skill_council_name,
+      username: username,
+      SSC_Code: SSC_code,
+      password: password,
+    });
 
-      res.send("User signed up successfully!");
-    } catch (error) {
-      console.error("Error signing up user:", error);
-      res.status(500).send("An error occurred while signing up user.");
-    }
-  } else {
-    res.send("Only Admin can create user");
+    res.send("User signed up successfully!");
+  } catch (error) {
+    console.error("Error signing up user:", error);
+    res.status(500).send("An error occurred while signing up user.");
   }
 };
 
