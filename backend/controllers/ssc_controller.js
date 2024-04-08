@@ -16,7 +16,7 @@ module.exports.createQPS = async (req, res) => {
     console.log(sscDoc);
 
     // Add a subcollection QPS
-    await sscDoc.ref.collection("QPS").doc(QPS_name).set({
+    await sscDoc.ref.collection("QPS").doc(QPS_id).set({
       createdAt: new Date(),
       QPS_name: QPS_name,
       QPS_id: QPS_id,
@@ -102,7 +102,7 @@ module.exports.getAllQPS = async (req, res) => {
 
     let documentIds = [];
     snapshot.forEach((doc) => {
-      documentIds.push(doc.id); // Collect each document's ID
+      documentIds.push(doc.data().QPS_name); // Collect each document's ID
     });
 
     console.log(documentIds); // Log the collected document IDs
