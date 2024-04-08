@@ -84,3 +84,34 @@ module.exports.getAllSSC = async (req, res) => {
     res.status(500).send("An error occurred while getting SSC.");
   }
 };
+
+module.exports.getAllQPS = async (req, res) => {
+  try {
+    const { SSC } = req.body; // SSC is assumed to be the parent document ID
+
+    // Reference to the subcollection
+    const qpsCollectionRef = firestore
+      .collection("SSC")
+      .doc(SSC)
+      .collection("QPS");
+
+    // Get a snapshot of the QPS subcollection
+    const snapshot = await qpsCollectionRef.get();
+
+    if (snapshot.empty) {
+      console.log("No matching documents.");
+      return res.status(404).send("No QPS found");
+    }
+
+    let documentIds = [];
+    snapshot.forEach((doc) => {
+      documentIds.push(doc.id); // Collect each document's ID
+    });
+
+    console.log(documentIds); // Log the collected document IDs
+    return res.status(200).json(documentIds); // Send the document IDs in the response
+  } catch (error) {
+    console.error("Error getting documents", error);
+    return res.status(500).send(error.toString());
+  }
+};
