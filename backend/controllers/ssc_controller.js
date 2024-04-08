@@ -74,7 +74,7 @@ module.exports.getAllSSC = async (req, res) => {
     let ssc = {};
     sscDocs.forEach((doc) => {
       const docData = doc.data();
-      ssc[doc.id] = docData.Skill_council_name;
+      ssc[docData.Skill_council_name] = doc.id;
     });
     res.status(200).json(ssc); // Sending the object as JSON
   } catch (error) {
