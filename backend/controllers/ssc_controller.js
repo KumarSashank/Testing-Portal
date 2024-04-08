@@ -70,12 +70,13 @@ module.exports.getSSC = async (req, res) => {
 
 module.exports.getAllSSC = async (req, res) => {
   try {
-    const sscDoc = await firestore.collection("SSC").get();
-    let ssc = [];
-    sscDoc.forEach((doc) => {
-      ssc.push(doc.data().Skill_council_name);
+    const sscDocs = await firestore.collection("SSC").get();
+    let ssc = {};
+    sscDocs.forEach((doc) => {
+      const docData = doc.data();
+      ssc[doc.id] = docData.Skill_council_name;
     });
-    res.send(ssc);
+    res.status(200).json(ssc); // Sending the object as JSON
   } catch (error) {
     console.error("Error getting SSC:", error);
     res.status(500).send("An error occurred while getting SSC.");
