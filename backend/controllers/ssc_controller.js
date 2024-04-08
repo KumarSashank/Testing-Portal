@@ -109,7 +109,11 @@ module.exports.getAllQPS = async (req, res) => {
 
     let documentIds = [];
     snapshot.forEach((doc) => {
-      documentIds.push(doc.data().QPS_name); // Collect each document's ID
+      const qps_obj = {
+        code: doc.id,
+        name: doc.data().QPS_name,
+      };
+      documentIds.push(qps_obj); // Collect each document's ID
     });
 
     console.log(documentIds); // Log the collected document IDs
