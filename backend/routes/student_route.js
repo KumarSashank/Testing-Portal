@@ -9,7 +9,7 @@ const router = Router();
 
 // router.get("/tata", check_user);
 router.post("/studentLogin", studentLogin); // Route for user signup
-router.get("/getQuestions", getQuestionPaper);
+router.post("/getQuestions", getQuestionPaper);
 router.post("/submitTest", submitTest);
 router.post("/processResult", processResult);
 
