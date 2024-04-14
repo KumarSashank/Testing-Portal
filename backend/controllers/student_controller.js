@@ -78,6 +78,7 @@ module.exports.getQuestionPaper = async (req, res) => {
     const questionsData = [];
     questionsRef.forEach((doc) => {
       const {
+        ANS,
         Option1,
         Option2,
         Option3,
@@ -90,6 +91,7 @@ module.exports.getQuestionPaper = async (req, res) => {
         QuestionLevelID,
       } = doc.data();
       questionsData.push({
+        ANS,
         Option1,
         Option2,
         Option3,
