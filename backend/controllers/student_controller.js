@@ -124,20 +124,13 @@ module.exports.submitTest = async (req, res) => {
       .collection("Results")
       .doc(studentID);
 
-    // Set the data for the document
+    // Set the data for the document including options_selected directly
     await studentRef.set({
-      // Add any data you want to store for the student
-      // You may want to include additional fields here
+      options_selected, // Store the entire options_selected object directly
+      // Add any additional data you want to store for the student here
     });
 
-    // Create a reference to the subcollection
-    const optionsSelectedRef = studentRef.collection("options_selected");
-
-    // Iterate through options_selected and add documents to the subcollection
-    for (const option of options_selected) {
-      // Set the document ID based on option.question_num
-      await optionsSelectedRef.doc(option.question_num.toString()).set(option);
-    }
+    // No need to iterate through options_selected to create subcollection documents
 
     return res.status(200).json({ success: true });
   } catch (err) {
@@ -179,6 +172,92 @@ module.exports.processResult = async (req, res) => {
         //pushing the student result to the database
         const resultRef = studentDoc.ref.set({ totalMarks: totalMarks });
       });
+
+      // Store the total marks for the current student
+      totalMarksMap[studentDoc.id] = totalMarks;
+    }
+
+    // Send the total marks map as response
+    return res.status(200).json(totalMarksMap);
+  } catch (error) {
+    console.error("Error processing results:", error);
+    return res.status(500).json({ error: "Internal server error" });
+  }
+};
+
+module.exports.processResult2 = async (req, res) => {
+  const { batchID } = req.body;
+
+  try {
+    const batchRef = await firestore.collection("Batches").doc(batchID).get();
+    if (!batchRef.exists) {
+      return res.status(404).json({ error: "Batch not found" });
+    }
+
+    const qpNum = batchRef.data().qpNo;
+    const QPS = batchRef.data().QPS;
+
+    //get the correct answers from the database
+
+    const questionsRef = await firestore
+      .collection("question_papers")
+      .doc(QPS)
+      .collection("papers")
+      .doc(qpNum)
+      .collection("questions")
+      .get();
+
+    //storing the correct answers and it marks
+    const answersAndMarks = {};
+    questionsRef.forEach((doc) => {
+      const questionData = doc.data();
+      answersAndMarks[doc.id] = {
+        answer: questionData.ANS,
+        marks: questionData.Marks,
+      };
+    });
+
+    // Prepare an object to store total marks for each student
+    const totalMarksMap = {};
+
+    // Get a reference to the collection of student documents
+    const studentsSnapshot = await firestore
+      .collection("Batches")
+      .doc(batchID)
+      .collection("Results")
+      .get();
+
+    // Process results for each student
+    for (const studentDoc of studentsSnapshot.docs) {
+      let totalMarks = 0;
+      const optionsSelected = studentDoc.data().options_selected;
+
+      // Calculate total marks based on the student's selected options
+      for (const questionID in optionsSelected) {
+        if (
+          optionsSelected.hasOwnProperty(questionID) &&
+          answersAndMarks.hasOwnProperty(questionID)
+        ) {
+          if (
+            optionsSelected[questionID] === answersAndMarks[questionID].answer
+          ) {
+            totalMarks += answersAndMarks[questionID].marks;
+          }
+        }
+        console.log(
+          "QP_no:",
+          questionID,
+          " :",
+          optionsSelected[questionID],
+          ":",
+          answersAndMarks[questionID].answer,
+          ":",
+          answersAndMarks[questionID].marks
+        );
+      }
+
+      // Update the student's document with the total marks
+      await studentDoc.ref.update({ totalMarks });
 
       // Store the total marks for the current student
       totalMarksMap[studentDoc.id] = totalMarks;
