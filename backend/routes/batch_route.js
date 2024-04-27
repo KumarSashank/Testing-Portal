@@ -8,7 +8,7 @@ const router = Router();
 
 // router.post("/create_qps", createQPS);
 // router.post("/create_nos", createNOS);
-router.get("/getQPlist", getQPlist);
+router.post("/getQPlist", getQPlist);
 router.post("/assignQPtoBatch", assignQPtoBatch);
 router.get("/getBatchList", getBatchList);
 
