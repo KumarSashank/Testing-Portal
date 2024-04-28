@@ -16,7 +16,7 @@ module.exports.getQPlist = async (req, res) => {
 
     const question_papers = data.data().question_papers;
     console.log(question_papers);
-    return res.status(200).json(question_papers);
+    return res.status(200).json({ question_papers_count: question_papers });
   } catch (err) {
     console.log(err);
     res.status(500).send("Internal Server Error");
