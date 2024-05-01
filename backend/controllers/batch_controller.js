@@ -44,6 +44,7 @@ module.exports.assignQPtoBatch = async (req, res) => {
 module.exports.getBatchList = async (req, res) => {
   //get the list of batches for specific qps
   const { SSC, QPS } = req.body;
+  console.log("SSC : ", SSC, "QPS : ", QPS);
   try {
     const qpsRef = firestore
       .collection("SSC")
