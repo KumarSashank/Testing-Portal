@@ -31,7 +31,7 @@ module.exports.studentLogin = async (req, res) => {
         .collection("Batches")
         .doc(batchID)
         .collection("students")
-        .doc("B1UI1")
+        .doc(studentID)
         .get();
 
       if (!batchRef.exists) {
@@ -40,8 +40,9 @@ module.exports.studentLogin = async (req, res) => {
 
       console.log(batchRef.data());
 
-      //authenticate with password
-      if (password !== batchRef.data().DOB) {
+      //change string to integer
+      const passCheck = parseInt(password, 10);
+      if (passCheck !== batchRef.data().DOB) {
         return res.status(401).json({ error: "Invalid password" });
       }
 
@@ -187,6 +188,7 @@ module.exports.processResult = async (req, res) => {
 
 module.exports.processResult2 = async (req, res) => {
   const { batchID } = req.body;
+  console.log("Batch ID:", batchID);
 
   try {
     const batchRef = await firestore.collection("Batches").doc(batchID).get();
@@ -217,6 +219,8 @@ module.exports.processResult2 = async (req, res) => {
       };
     });
 
+    console.log(answersAndMarks);
+
     // Prepare an object to store total marks for each student
     const totalMarksMap = {};
 
@@ -234,6 +238,7 @@ module.exports.processResult2 = async (req, res) => {
 
       // Calculate total marks based on the student's selected options
       for (const questionID in optionsSelected) {
+        let correct = false;
         if (
           optionsSelected.hasOwnProperty(questionID) &&
           answersAndMarks.hasOwnProperty(questionID)
@@ -241,6 +246,7 @@ module.exports.processResult2 = async (req, res) => {
           if (
             optionsSelected[questionID] === answersAndMarks[questionID].answer
           ) {
+            correct = true;
             totalMarks += answersAndMarks[questionID].marks;
           }
         }
@@ -252,7 +258,9 @@ module.exports.processResult2 = async (req, res) => {
           ":",
           answersAndMarks[questionID].answer,
           ":",
-          answersAndMarks[questionID].marks
+          answersAndMarks[questionID].marks,
+          ":",
+          correct ? "Correct" : "Incorrect"
         );
       }
 
@@ -267,6 +275,32 @@ module.exports.processResult2 = async (req, res) => {
     return res.status(200).json(totalMarksMap);
   } catch (error) {
     console.error("Error processing results:", error);
+    return res.status(500).json({ error: "Internal server error" });
+  }
+};
+
+module.exports.getResults = async (req, res) => {
+  const { batchID } = req.body;
+
+  try {
+    const resultsRef = await firestore
+      .collection("Batches")
+      .doc(batchID)
+      .collection("Results")
+      .get();
+
+    const resultsData = [];
+    resultsRef.forEach((doc) => {
+      const { totalMarks } = doc.data();
+      resultsData.push({
+        studentID: doc.id,
+        totalMarks,
+      });
+    });
+
+    return res.status(200).json(resultsData);
+  } catch (error) {
+    console.error("Error accessing Firestore:", error);
     return res.status(500).json({ error: "Internal server error" });
   }
 };
