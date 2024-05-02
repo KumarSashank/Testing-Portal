@@ -117,6 +117,8 @@ module.exports.getQuestionPaper = async (req, res) => {
 module.exports.submitTest = async (req, res) => {
   const { options_selected, studentID, batchID } = req.body;
 
+  console.log("Options Selected:", options_selected);
+
   try {
     // Get a reference to the document
     const studentRef = firestore
