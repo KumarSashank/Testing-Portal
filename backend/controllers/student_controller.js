@@ -117,6 +117,9 @@ module.exports.getQuestionPaper = async (req, res) => {
 module.exports.submitTest = async (req, res) => {
   const { options_selected, studentID, batchID } = req.body;
 
+  console.log("Student ID:", studentID);
+  console.log("Batch ID:", batchID);
+
   console.log("Options Selected:", options_selected);
 
   try {
