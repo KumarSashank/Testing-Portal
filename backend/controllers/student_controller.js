@@ -204,15 +204,24 @@ module.exports.processResult2 = async (req, res) => {
     const qpNum = batchRef.data().qpNo;
     const QPS = batchRef.data().QPS;
 
-    //get the correct answers from the database
+    console.log("QP Number:", qpNum);
+    console.log("QPS:", QPS);
 
-    const questionsRef = await firestore
-      .collection("question_papers")
-      .doc(QPS)
-      .collection("papers")
-      .doc(qpNum)
-      .collection("questions")
-      .get();
+    let questionsRef;
+
+    //get the correct answers from the database
+    try {
+      questionsRef = await firestore
+        .collection("question_papers")
+        .doc(QPS)
+        .collection("papers")
+        .doc(qpNum.toString())
+        .collection("questions")
+        .get();
+    } catch (error) {
+      console.error("Error accessing Firestore:", error);
+      return res.status(500).json({ error: "Internal server error" });
+    }
 
     //storing the correct answers and it marks
     const answersAndMarks = {};
