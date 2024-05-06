@@ -46,6 +46,8 @@ module.exports.studentLogin = async (req, res) => {
         return res.status(401).json({ error: "Invalid password" });
       }
 
+      //fetch student details
+      const studentDetails = batchRef.data();
       // Assuming authentication is successful
       return res.status(200).json({
         message: "Login successful",
@@ -53,6 +55,7 @@ module.exports.studentLogin = async (req, res) => {
         qps: qps,
         studentNumber: studentNumber,
         QPno: qpNum,
+        studentDetails,
       });
     } else {
       console.error("Invalid student ID format");
