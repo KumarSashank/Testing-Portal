@@ -243,14 +243,60 @@ module.exports.uploadController = async (req, res) => {
   }
 };
 
-module.exports.uploadstud = async (req, res) => {
+module.exports.createBatch = async (req, res) => {
   try {
     const file = req.file;
     if (!file) {
       return res.status(400).send("No file uploaded.");
     }
 
-    const { SSC, QPS, qp } = req.body;
+    const { SSC, QPS, qpNo } = req.body;
+    //taking remaining data like test center
+    const {
+      batchName,
+      batchSize,
+      project,
+      trainingCentre,
+      state,
+      spocContactNo,
+      centerAddress,
+      assessmentStartDate,
+      assessmentEndDate,
+      loginRestrictCount,
+      modeOfAssessment,
+      centerId,
+      district,
+      spocEmailId,
+      tpName,
+      startTime,
+      endTime,
+    } = req.body;
+
+    const batchdata = {
+      batchName,
+      batchSize,
+      project,
+      trainingCentre,
+      state,
+      spocContactNo,
+      centerAddress,
+      assessmentStartDate,
+      assessmentEndDate,
+      loginRestrictCount,
+      modeOfAssessment,
+      centerId,
+      district,
+      spocEmailId,
+      tpName,
+      startTime,
+      endTime,
+      QPS,
+      qpNo,
+    };
+
+    if (!batchName || !trainingCentre) {
+      return res.status(400).send({ message: "Required fields are missing" });
+    }
     const workbook = readExcelFile(file);
     const data = extractDataFromWorkbook(workbook);
 
@@ -272,11 +318,18 @@ module.exports.uploadstud = async (req, res) => {
 
     await uploadStudentsData(batchid, data, QPS);
 
+    //adding batch data
+    const batchRef = firestore.collection("Batches").doc(batchid);
+    //set the values for batchRef
+    batchRef.set(batchdata);
+
+    //updating the latest batch count
     await firestore
       .collection("metaData")
       .doc("batches")
       .update({ LastBatchNum: lastbatchNum });
 
+    //adding this batch id in QPS data
     try {
       // Get a reference to the document
       const batchRef = firestore

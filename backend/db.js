@@ -21,5 +21,6 @@ firebase.initializeApp({
 });
 
 const db = firebase.firestore();
+db.settings({ ignoreUndefinedProperties: true });
 
 module.exports = db;

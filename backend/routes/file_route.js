@@ -6,10 +6,10 @@ const fs = require("fs");
 const upload = multer({ dest: "/tmp/" });
 const {
   uploadController,
-  uploadstud,
+  createBatch,
 } = require("../controllers/file_controller");
 
 router.post("/uploadqp", upload.single("file"), uploadController);
-router.post("/uploadStudents", upload.single("file"), uploadstud);
+router.post("/createBatch", upload.single("file"), createBatch);
 
 module.exports = router;
