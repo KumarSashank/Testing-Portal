@@ -2,6 +2,11 @@
 
 const db = require("../db");
 const firebase = require("firebase-admin");
+const fs = require("fs");
+const { Storage } = require("@google-cloud/storage");
+const storage = new Storage();
+const util = require("util");
+const unlinkAsync = util.promisify(fs.unlink);
 
 const firestore = db;
 
@@ -321,3 +326,56 @@ module.exports.getResults = async (req, res) => {
     return res.status(500).json({ error: "Internal server error" });
   }
 };
+
+module.exports.studentImgUpload = async (req, res) => {
+  try {
+    const file = req.file;
+    //checking whether file is uploaded to server or not
+    if (!file) {
+      return res.status(400).send("No file uploaded.");
+    }
+
+    const { studentid, batchID } = req.body;
+
+    //calling uploadquestionpapers function
+    const responseJson = await uploadFileToStorage(file, batchID, studentid);
+
+    // Delete the uploaded file after the total process completed
+    await unlinkAsync(file.path);
+    console.log("Uploaded file deleted successfully.");
+
+    // store the link in student document
+    const studentRef = firestore
+      .collection("Batches")
+      .doc(batchID)
+      .collection("students")
+      .doc(studentid);
+    await studentRef.update({ imageLink: responseJson });
+
+    return res.status(200).json(responseJson);
+  } catch (error) {
+    console.error("Error uploading file:", error);
+    res.status(500).send("Internal Server Error");
+  }
+};
+
+async function uploadFileToStorage(file, batchID, studentid) {
+  try {
+    const bucket = firebase.storage().bucket();
+    const destinationPath = `Student_Images/${batchID}/${studentid + ".png"}`;
+
+    // Uploading file to Firebase Storage
+    await bucket.upload(file.path, { destination: destinationPath });
+
+    // Make the file public
+    await bucket.file(destinationPath).makePublic();
+
+    // Construct the public URL
+    const publicUrl = `https://storage.googleapis.com/${bucket.name}/${destinationPath}`;
+
+    return publicUrl;
+  } catch (error) {
+    console.error("Error uploading file: ", error);
+    throw error;
+  }
+}

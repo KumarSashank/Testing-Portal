@@ -1,4 +1,6 @@
 const { Router } = require("express");
+const multer = require("multer");
+const upload = multer({ dest: "/tmp/" });
 const {
   studentLogin,
   getQuestionPaper,
@@ -6,6 +8,7 @@ const {
   processResult,
   processResult2,
   getResults,
+  studentImgUpload,
 } = require("../controllers/student_controller");
 const router = Router();
 
@@ -16,6 +19,7 @@ router.post("/submitTest", submitTest);
 router.post("/processResult", processResult);
 router.post("/processResult2", processResult2);
 router.post("/getResults", getResults);
+router.post("/studentImgUpload", upload.single("file"), studentImgUpload);
 
 router.get("/hello", (req, res) => {
   res.send("Hello, World!");
