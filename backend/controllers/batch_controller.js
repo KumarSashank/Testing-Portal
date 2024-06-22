@@ -42,9 +42,9 @@ module.exports.assignQPtoBatch = async (req, res) => {
 };
 
 module.exports.getBatchList = async (req, res) => {
-  //get the list of batches for specific qps
   const { SSC, QPS } = req.body;
-  console.log("SSC : ", SSC, "QPS : ", QPS);
+  console.log("SSC:", SSC, "QPS:", QPS);
+
   try {
     const qpsRef = firestore
       .collection("SSC")
@@ -52,11 +52,35 @@ module.exports.getBatchList = async (req, res) => {
       .collection("QPS")
       .doc(QPS);
     const data = await qpsRef.get();
-    const batches = data.data().batches;
 
-    return res.status(200).json(batches);
+    if (!data.exists) {
+      return res.status(404).send("QPS document not found");
+    }
+
+    const batches = data.data().batches;
+    // const batches = ["B10", "B14"];
+
+    // Fetch the data for every batch listed in the batches array
+    let batchesData = [];
+    for (const batchId of batches) {
+      console.log(batchId);
+      console.log(typeof batchId);
+      const batchRef = await db.collection("Batches").doc(batchId);
+      const batchDoc = await batchRef.get();
+      console.log(batchDoc.data());
+      if (batchDoc.exists) {
+        batchesData.push(batchDoc.data());
+      } else {
+        console.log(`Batch ID ${batchId} not found`);
+      }
+    }
+
+    const batchRef = firestore.collection("Batches").doc("B24");
+    const batchDoc = await batchRef.get();
+    console.log(batchDoc.data());
+    return res.status(200).json(batchesData);
   } catch (e) {
-    console.log(e);
+    console.error("Error fetching batch list:", e);
     res.status(500).send("Internal Server Error");
   }
 };
