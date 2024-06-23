@@ -115,7 +115,7 @@ module.exports.getStates = async (req, res) => {
   res.status(200).json(states);
 };
 
-module.exports.getDistrcits = async (req, res) => {
+module.exports.getDistricts = async (req, res) => {
   //get the districts list of all states from districts.json
   const districts = require("../json_data/districts.json");
   res.status(200).json(districts);
