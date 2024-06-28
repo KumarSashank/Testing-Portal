@@ -64,6 +64,7 @@ module.exports.createSSC = async (req, res) => {
       username: username,
       SSC_Code: SSC_code,
       password: password,
+      questions_count: 0,
     });
 
     res.send("User signed up successfully!");
