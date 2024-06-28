@@ -243,6 +243,7 @@ module.exports.uploadController = async (req, res) => {
   }
 };
 
+//creating batch
 module.exports.createBatch = async (req, res) => {
   try {
     const file = req.file;
@@ -358,3 +359,125 @@ module.exports.createBatch = async (req, res) => {
     res.status(500).send("Internal Server Error");
   }
 };
+
+module.exports.uploadQuestions = async (req, res) => {
+  try {
+    const file = req.file;
+    if (!file) {
+      return res.status(400).send("No file uploaded.");
+    }
+
+    const { SSC } = req.body;
+
+    // Read the Excel file
+    const workbook = readExcelFile(file);
+    const data = extractDataFromWorkbook(workbook);
+
+    // Group questions based on NOS and Marks
+    const groupedData = groupQuestions(data);
+
+    // Update Firestore with grouped data
+    await updateGroupedDataInFirestore(SSC, groupedData);
+
+    const SSC_ref = await firestore.collection("SSC").doc(SSC).get();
+    if (!SSC_ref.exists) {
+      return res.status(400).send("Invalid SSC code");
+    }
+
+    var questions_count = await SSC_ref.data().questions_count;
+    console.log(questions_count);
+
+    //NOS collection name
+    const nos_questions = "questions_" + SSC;
+    // Loop through the extracted data
+    for (const question of data) {
+      // Directly access the document in 'NOS' collection using question.NOS as the document ID
+      const nosDocRef = firestore
+        .collection("SSC")
+        .doc(SSC)
+        .collection(nos_questions);
+
+      ++questions_count;
+      // Add the question to the 'questions' collection with a custom document ID
+      // Add the question_count to the question object
+      const questionWithCount = {
+        ...question,
+        index: questions_count,
+        SSC: SSC,
+      };
+
+      // Add the question to the 'questions' collection with a custom document ID and include the question_count
+      await nosDocRef.doc(questions_count.toString()).set(questionWithCount);
+
+      console.log(
+        `Question added to NOS ID ${question.NOS} with custom ID ${questions_count}`
+      );
+    }
+
+    //update the questions_count in SSC_ref
+    await SSC_ref.ref.update({ questions_count: questions_count });
+
+    // Delete the uploaded file after the process is completed
+    await unlinkAsync(file.path);
+    console.log("Uploaded file deleted successfully.");
+
+    return res.status(200).json({ message: "Questions uploaded successfully" });
+  } catch (error) {
+    console.error("Error uploading file:", error);
+    res.status(500).send("Internal Server Error");
+  }
+};
+
+function groupQuestions(data) {
+  let groupedData = {};
+
+  data.forEach((row) => {
+    const { NOS, Marks } = row;
+    if (!groupedData[NOS]) {
+      groupedData[NOS] = {};
+    }
+    if (!groupedData[NOS][Marks]) {
+      groupedData[NOS][Marks] = 0;
+    }
+    groupedData[NOS][Marks]++;
+  });
+
+  return groupedData;
+}
+
+async function updateGroupedDataInFirestore(SSC, groupedData) {
+  try {
+    const sscDocRef = db.collection("SSC").doc(SSC);
+    const sscDocSnap = await sscDocRef.get();
+
+    let existingGroupedData = {};
+    if (sscDocSnap.exists) {
+      existingGroupedData = sscDocSnap.data().groupedData || {};
+    }
+
+    const mergedGroupedData = mergeGroupedData(
+      existingGroupedData,
+      groupedData
+    );
+
+    await sscDocRef.set({ groupedData: mergedGroupedData }, { merge: true });
+  } catch (error) {
+    console.error("Error updating grouped data in Firestore:", error);
+    throw error;
+  }
+}
+
+function mergeGroupedData(existingData, newData) {
+  for (const nos in newData) {
+    if (!existingData[nos]) {
+      existingData[nos] = {};
+    }
+    for (const mark in newData[nos]) {
+      if (!existingData[nos][mark]) {
+        existingData[nos][mark] = 0;
+      }
+      existingData[nos][mark] += newData[nos][mark];
+    }
+  }
+  return existingData;
+}

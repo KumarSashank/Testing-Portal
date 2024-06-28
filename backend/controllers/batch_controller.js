@@ -74,10 +74,6 @@ module.exports.getBatchList = async (req, res) => {
         console.log(`Batch ID ${batchId} not found`);
       }
     }
-
-    const batchRef = firestore.collection("Batches").doc("B24");
-    const batchDoc = await batchRef.get();
-    console.log(batchDoc.data());
     return res.status(200).json(batchesData);
   } catch (e) {
     console.error("Error fetching batch list:", e);
