@@ -54,6 +54,30 @@ module.exports.createNOS = async (req, res) => {
   }
 };
 
+module.exports.getNOSList = async (req, res) => {
+  const { SSC } = req.body;
+  console.log("SSC: ", SSC);
+  try {
+    const sscDoc = await firestore.collection("SSC").doc(SSC).get();
+    const nosDocs = await sscDoc.ref.collection("NOS").get();
+    let nosArray = [];
+
+    nosDocs.forEach((doc) => {
+      const docData = doc.data();
+      const nosObject = {
+        code: doc.id,
+        name: docData.NOS_name,
+      };
+      nosArray.push(nosObject);
+    });
+
+    res.status(200).json(nosArray); // Sending the array of objects as JSON
+  } catch (error) {
+    console.error("Error getting NOS:", error);
+    res.status(500).send("An error occurred while getting NOS.");
+  }
+};
+
 module.exports.getSSC = async (req, res) => {
   const { SSC_code } = req.body;
   try {
