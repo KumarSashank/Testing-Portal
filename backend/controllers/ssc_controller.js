@@ -78,6 +78,36 @@ module.exports.getNOSList = async (req, res) => {
   }
 };
 
+module.exports.assignNOStoQPS = async (req, res) => {
+  const { SSC, QPS, NOS } = req.body;
+  console.log("SSC: ", SSC);
+  console.log("QPS: ", QPS);
+  console.log("NOS: ", NOS);
+
+  try {
+    const sscref = await firestore
+      .collection("SSC")
+      .doc(SSC)
+      .collection("QPS")
+      .doc(QPS)
+      .get();
+
+    //by for loop, updated one by one from NOS_array
+    for (let i = 0; i < NOS.length; i++) {
+      await sscref.ref.update({
+        //add NOS array to the doc(QPS) as field NOS_array
+        NOS_array: firebase.firestore.FieldValue.arrayUnion(NOS[i]),
+      });
+      console.log(NOS[i], "Added");
+    }
+    console.log("NOS list added to QPS");
+    res.status(200).json("NOS added to QPS");
+  } catch (e) {
+    console.log("Error assigning NOS to QPS", e);
+    res.status(500).send("An error occurred while assigning NOS to QPS.");
+  }
+};
+
 module.exports.getSSC = async (req, res) => {
   const { SSC_code } = req.body;
   try {

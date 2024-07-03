@@ -6,6 +6,7 @@ const {
   getAllSSC,
   getAllQPS,
   getNOSList,
+  assignNOStoQPS,
 } = require("../controllers/ssc_controller");
 const router = Router();
 
@@ -15,6 +16,7 @@ router.get("/getSSC", getSSC);
 router.get("/getAllSSC", getAllSSC);
 router.post("/getAllQPS", getAllQPS);
 router.post("/getNOSList", getNOSList);
+router.post("/assignNOStoQPS", assignNOStoQPS);
 
 // router.post("/signup", signupUser); // Route for user signup
 // router.post("/signin/:role", signinUser); // Route for user sign in with role parameter
