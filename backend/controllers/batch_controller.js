@@ -46,6 +46,7 @@ module.exports.getBatches = async (req, res) => {
   console.log("SSC:", SSC, "QPS:", QPS);
 
   try {
+    // Assuming you still need to verify the existence of the QPS document in SSC/QPS
     const qpsRef = firestore
       .collection("SSC")
       .doc(SSC)
@@ -57,24 +58,23 @@ module.exports.getBatches = async (req, res) => {
       return res.status(404).send("QPS document not found");
     }
 
-    const batches = data.data().batches;
-    // const batches = ["B10", "B14"];
+    // Query the Batches collection for documents where the QPS field matches the QPS value from the request
+    const batchesQuerySnapshot = await db
+      .collection("Batches")
+      .where("QPS", "==", QPS)
+      .get();
 
-    // Fetch the data for every batch listed in the batches array
-    let batchesData = [];
-    for (const batchId of batches) {
-      console.log(batchId);
-      console.log(typeof batchId);
-      const batchRef = await db.collection("Batches").doc(batchId);
-      const batchDoc = await batchRef.get();
-      console.log(batchDoc.data());
-      if (batchDoc.exists) {
-        //add batchId in batchDoc.data()
-        batchesData.push({ ...batchDoc.data(), batchId });
-      } else {
-        console.log(`Batch ID ${batchId} not found`);
-      }
+    if (batchesQuerySnapshot.empty) {
+      return res.status(404).send("No batches found for the given QPS");
     }
+
+    let batchesData = [];
+    batchesQuerySnapshot.forEach((doc) => {
+      console.log(doc.id, "=>", doc.data());
+      // Add the batch ID to the document data
+      batchesData.push({ ...doc.data(), batchId: doc.id });
+    });
+
     return res.status(200).json(batchesData);
   } catch (e) {
     console.error("Error fetching batch list:", e);
