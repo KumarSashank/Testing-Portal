@@ -146,6 +146,9 @@ async function uploadQuestionPaperData2(QPS, SSC, data) {
 
     console.log("Count Updated", newpaper);
 
+    console.log("Question Papers: ");
+    console.log(data);
+
     return newpaper;
   } catch (error) {
     console.error("Error in operation:", error);
@@ -434,6 +437,102 @@ module.exports.uploadQuestions = async (req, res) => {
     res.status(500).send("Internal Server Error");
   }
 };
+
+module.exports.generateQP = async (req, res) => {
+  const { SSC, QPS, questions_pattern } = req.body;
+  try {
+    const questionPaper = await generateQuestionPaper(questions_pattern);
+
+    // Upload the generated question paper to Firestore
+    // await uploadQuestionPaperData2(QPS, SSC, questionPaper);
+
+    res.status(200).send(questionPaper);
+  } catch (error) {
+    console.error("Error generating question paper:", error);
+    res.status(500).send("Internal Server Error");
+  }
+};
+
+module.exports.addQP = async (req, res) => {
+  const { SSC, QPS, questionPaper } = req.body;
+  try {
+    // Upload the generated question paper to Firestore
+    const QPS_paper_count = await uploadQuestionPaperData2(
+      QPS,
+      SSC,
+      questionPaper
+    );
+
+    //send the response that question paper created and its count
+    return res.status(200).json({ QPS_paper_count: QPS_paper_count });
+  } catch (error) {
+    console.error("Error generating question paper:", error);
+    res.status(500).send("Internal Server Error");
+  }
+};
+
+async function generateQuestionPaper(questionsPattern) {
+  let questionPaper = [];
+
+  for (const nosItem of questionsPattern) {
+    const allQuestions = await fetchQuestionsForNOS(nosItem.NOS);
+
+    let nosQuestions = [];
+    for (const pattern of nosItem.pattern) {
+      const filteredQuestions = allQuestions.filter(
+        (q) => q.Marks === pattern.Marks
+      );
+      const shuffledQuestions = shuffleArray(filteredQuestions);
+      const randomQuestions = shuffledQuestions.slice(0, pattern.Count);
+
+      // Transform each question to the desired format here if needed
+      nosQuestions = nosQuestions.concat(randomQuestions);
+    }
+
+    // Transform nosQuestions to include additional details if necessary
+    const detailedQuestions = nosQuestions.map((q, index) => ({
+      "s.no": index + 1,
+      Question: q.Question.trim(),
+      Option1: q.Option1.trim(),
+      Option2: q.Option2.trim(),
+      Option3: q.Option3.trim(),
+      Option4: q.Option4.trim(),
+      ANS: q.ANS,
+      Noofoptions: 4, // Assuming all questions have 4 options, adjust as necessary
+      QuestionTypeID: q.QuestionTypeID,
+      QuestionLevelID: q.QuestionLevelID,
+      PCID: q.PCID,
+      Marks: q.Marks,
+      NOS: q.NOS,
+    }));
+
+    questionPaper = questionPaper.concat(detailedQuestions);
+  }
+  // After all questions have been added to questionPaper
+  questionPaper.forEach((question, index) => {
+    question["s.no"] = index + 1; // Update s.no based on the question's position in the array
+  });
+
+  console.log(questionPaper);
+  return questionPaper;
+}
+function shuffleArray(array) {
+  for (let i = array.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [array[i], array[j]] = [array[j], array[i]]; // Swap elements
+  }
+  return array;
+}
+
+async function fetchQuestionsForNOS(NOS) {
+  const questionsRef = firestore.collection("Questions");
+  const querySnapshot = await questionsRef.where("NOS", "==", NOS).get();
+  const questions = [];
+  querySnapshot.forEach((doc) => {
+    questions.push(doc.data());
+  });
+  return questions;
+}
 
 function groupQuestions(data) {
   let groupedData = {};
