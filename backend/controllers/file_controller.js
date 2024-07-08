@@ -10,7 +10,7 @@ const unlinkAsync = util.promisify(fs.unlink);
 
 const firestore = db;
 
-async function uploadQuestionPapers(file, SSC, QPS) {
+async function uploadQuestionPapers(file, SSC, QPS, cutoff) {
   //generating a name for question paper by adding date to QPS
   // const nameWithDate = generateNameWithDate(QPS);
 
@@ -19,7 +19,12 @@ async function uploadQuestionPapers(file, SSC, QPS) {
   const data = extractDataFromWorkbook(workbook);
 
   //Getting QP count from uploading question paper data
-  const QPS_paper_count = await uploadQuestionPaperData2(QPS, SSC, data); //uploading data to firestore
+  const QPS_paper_count = await uploadQuestionPaperData2(
+    QPS,
+    SSC,
+    data,
+    cutoff
+  ); //uploading data to firestore
 
   const filename = QPS + "-" + QPS_paper_count;
   const url = await uploadFileToStorage(file, "Question_Papers", filename);
@@ -80,7 +85,7 @@ async function uploadQuestionPaperData(nameWithDate, SSC, data) {
 }
 
 //checking gpt
-async function uploadQuestionPaperData2(QPS, SSC, data) {
+async function uploadQuestionPaperData2(QPS, SSC, data, cutoff) {
   try {
     // Reference to the document
     const qpsRef = firestore.collection("question_papers").doc(QPS);
@@ -124,7 +129,7 @@ async function uploadQuestionPaperData2(QPS, SSC, data) {
     //adding total questions count in field
     await papersRef
       .doc(newpaper.toString())
-      .set({ "Total questions": data.length });
+      .set({ "Total questions": data.length, cutoff: cutoff });
 
     // Get the reference to the questions subcollection
     const questionsRef = papersRef
@@ -228,12 +233,12 @@ module.exports.uploadController = async (req, res) => {
       return res.status(400).send("No file uploaded.");
     }
 
-    const { SSC, QPS } = req.body;
+    const { SSC, QPS, cutoff } = req.body;
     console.log(SSC);
     console.log(QPS);
 
     //calling uploadquestionpapers function
-    const responseJson = await uploadQuestionPapers(file, SSC, QPS);
+    const responseJson = await uploadQuestionPapers(file, SSC, QPS, cutoff);
 
     // Delete the uploaded file after the total process completed
     await unlinkAsync(file.path);
