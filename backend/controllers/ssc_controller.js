@@ -78,6 +78,25 @@ module.exports.getNOSList = async (req, res) => {
   }
 };
 
+module.exports.assignedNOS = async (req, res) => {
+  const { SSC, QPS } = req.body;
+  try {
+    const sscref = await firestore
+      .collection("SSC")
+      .doc(SSC)
+      .collection("QPS")
+      .doc(QPS)
+      .get();
+
+    const nosArray = sscref.data().NOS_array;
+
+    res.status(200).json(nosArray); // Sending the array of objects as JSON
+  } catch (error) {
+    console.error("Error getting NOS:", error);
+    res.status(500).send("An error occurred while getting NOS.");
+  }
+};
+
 module.exports.assignNOStoQPS = async (req, res) => {
   const { SSC, QPS, NOS } = req.body;
   console.log("SSC: ", SSC);
