@@ -216,9 +216,20 @@ module.exports.processResult2 = async (req, res) => {
     console.log("QPS:", QPS);
 
     let questionsRef;
+    let cutoff;
 
     //get the correct answers from the database
     try {
+      const QPref = await firestore
+        .collection("question_papers")
+        .doc(QPS)
+        .collection("papers")
+        .doc(qpNum.toString())
+        .get();
+
+      cutoff = QPref.data().cutoff;
+      console.log("cutoff:", cutoff);
+
       questionsRef = await firestore
         .collection("question_papers")
         .doc(QPS)
@@ -286,11 +297,23 @@ module.exports.processResult2 = async (req, res) => {
         );
       }
 
-      // Update the student's document with the total marks
-      await studentDoc.ref.update({ totalMarks });
+      let pass = false;
+      if (totalMarks >= cutoff) {
+        pass = true;
+      }
+      // Update the student's document with the total marks and pass
+      await studentDoc.ref.update({
+        totalMarks: totalMarks,
+        pass: pass,
+      });
+
+      const result = {
+        totalMarks: totalMarks,
+        pass: pass,
+      };
 
       // Store the total marks for the current student
-      totalMarksMap[studentDoc.id] = totalMarks;
+      totalMarksMap[studentDoc.id] = result;
     }
 
     // Send the total marks map as response
@@ -313,10 +336,11 @@ module.exports.getResults = async (req, res) => {
 
     const resultsData = [];
     resultsRef.forEach((doc) => {
-      const { totalMarks } = doc.data();
+      const { totalMarks, pass } = doc.data();
       resultsData.push({
         studentID: doc.id,
         totalMarks,
+        pass,
       });
     });
 
