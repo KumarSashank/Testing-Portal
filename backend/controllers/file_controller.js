@@ -38,11 +38,13 @@ async function uploadQuestionPapers(file, SSC, QPS, cutoff) {
   //   QPS
   // );
 
+  const new_qp_id = QPS_paper_count + 1;
   return {
     url: url,
     filename: file.originalname,
     SSC: SSC,
     QPS: QPS,
+    question_paper_id: new_qp_id,
   };
 }
 
