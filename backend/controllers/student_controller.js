@@ -51,6 +51,21 @@ module.exports.studentLogin = async (req, res) => {
         return res.status(401).json({ error: "Invalid password" });
       }
 
+      //check whether student is already submitted the test or not
+      if (!batchRef.data().submitted) {
+        return res.status(400).json({ error: "Test already submitted" });
+      }
+      //count the student login and store in db
+      const count = batchRef.data().count;
+      //if count variable is not there, add count variable with 1
+      if (!count) {
+        await batchRef.ref.update({ count: 1 });
+      }
+      //if count variable is there, update the count variable with 1
+      else {
+        await batchRef.ref.update({ count: count + 1 });
+      }
+      console.log("count", count);
       //fetch student details
       const studentDetails = batchRef.data();
       // Assuming authentication is successful
@@ -142,6 +157,15 @@ module.exports.submitTest = async (req, res) => {
     await studentRef.set({
       options_selected, // Store the entire options_selected object directly
       // Add any additional data you want to store for the student here
+    });
+
+    const studentRef2 = firestore
+      .collection("Batches")
+      .doc(batchID)
+      .collection("students")
+      .doc(studentID);
+    await studentRef2.update({
+      submitted: true,
     });
 
     // No need to iterate through options_selected to create subcollection documents
