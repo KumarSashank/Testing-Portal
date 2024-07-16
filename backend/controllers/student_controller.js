@@ -53,6 +53,8 @@ module.exports.studentLogin = async (req, res) => {
 
       //check whether student is already submitted the test or not
       if (!batchRef.data().submitted) {
+      //check whether student is already submitted the test
+      if (batchRef.data().submitted) {
         return res.status(400).json({ error: "Test already submitted" });
       }
       //count the student login and store in db
