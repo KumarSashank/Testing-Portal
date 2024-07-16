@@ -7,6 +7,7 @@ const { Storage } = require("@google-cloud/storage");
 const storage = new Storage();
 const util = require("util");
 const unlinkAsync = util.promisify(fs.unlink);
+const JWT_SECRET = "Kumar Sashank is the Backend Developer.";
 
 const firestore = db;
 
@@ -31,6 +32,19 @@ module.exports.studentLogin = async (req, res) => {
       }
       const qpNum = qpRef.data().qpNo;
 
+      //create the jwt for student login
+      const jwt = require("jsonwebtoken");
+      const token = jwt.sign(
+        {
+          studentID: studentID,
+          batchID: batchID,
+        },
+        JWT_SECRET,
+        {
+          expiresIn: "3h",
+        }
+      );
+
       // Fetch the batch document from Firestore
       const batchRef = await firestore
         .collection("Batches")
@@ -51,12 +65,11 @@ module.exports.studentLogin = async (req, res) => {
         return res.status(401).json({ error: "Invalid password" });
       }
 
-      //check whether student is already submitted the test or not
-      if (!batchRef.data().submitted) {
       //check whether student is already submitted the test
       if (batchRef.data().submitted) {
         return res.status(400).json({ error: "Test already submitted" });
       }
+
       //count the student login and store in db
       const count = batchRef.data().count;
       //if count variable is not there, add count variable with 1
@@ -73,6 +86,7 @@ module.exports.studentLogin = async (req, res) => {
       // Assuming authentication is successful
       return res.status(200).json({
         message: "Login successful",
+        token: token,
         batchID: batchID,
         qps: qps,
         studentNumber: studentNumber,
