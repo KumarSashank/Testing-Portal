@@ -83,6 +83,17 @@ module.exports.studentLogin = async (req, res) => {
       console.log("count", count);
       //fetch student details
       const studentDetails = batchRef.data();
+
+      //fetching the job role which is QPS name by collection group of QPS
+      const jobRoleRef = await firestore
+        .collectionGroup("QPS")
+        .where("QPS_id", "==", qps)
+        .get();
+      //get tge data from jobRoleref
+      const jobRole = jobRoleRef.docs[0].data().QPS_name;
+      console.log(jobRole);
+      // const jobRole = await jobRoleRef.QPS_name;
+
       // Assuming authentication is successful
       return res.status(200).json({
         message: "Login successful",
@@ -91,6 +102,7 @@ module.exports.studentLogin = async (req, res) => {
         qps: qps,
         studentNumber: studentNumber,
         QPno: qpNum,
+        jobRole: jobRole,
         studentDetails,
       });
     } else {
