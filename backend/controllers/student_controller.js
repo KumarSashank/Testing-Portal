@@ -54,7 +54,7 @@ module.exports.studentLogin = async (req, res) => {
         .get();
 
       if (!batchRef.exists) {
-        return res.status(404).json({ error: "Batch not found" });
+        return res.status(404).json({ error: "Student not found" });
       }
 
       console.log(batchRef.data());
@@ -378,6 +378,7 @@ module.exports.processResult2 = async (req, res) => {
 
 module.exports.getResults = async (req, res) => {
   const { batchID } = req.body;
+  console.log("Batch id: ", batchID);
 
   try {
     const resultsRef = await firestore
