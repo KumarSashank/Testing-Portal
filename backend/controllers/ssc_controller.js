@@ -127,6 +127,36 @@ module.exports.assignNOStoQPS = async (req, res) => {
   }
 };
 
+module.exports.unassignNOStoQPS = async (req, res) => {
+  const { SSC, QPS, NOS } = req.body;
+  console.log("SSC: ", SSC);
+  console.log("QPS: ", QPS);
+  console.log("NOS: ", NOS);
+
+  try {
+    const sscref = await firestore
+      .collection("SSC")
+      .doc(SSC)
+      .collection("QPS")
+      .doc(QPS)
+      .get();
+
+    //by for loop, updated one by one from NOS_array
+    for (let i = 0; i < NOS.length; i++) {
+      await sscref.ref.update({
+        //remove NOS array to the doc(QPS) as field NOS_array
+        NOS_array: firebase.firestore.FieldValue.arrayRemove(NOS[i]),
+      });
+      console.log(NOS[i], "Removed");
+    }
+    console.log("NOS list removed from QPS");
+    res.status(200).json("Selected NOS's removed from QPS");
+  } catch (e) {
+    console.log("Error unassigning NOS to QPS", e);
+    res.status(500).send("An error occurred while unassigning NOS to QPS.");
+  }
+};
+
 module.exports.getSSC = async (req, res) => {
   const { SSC_code } = req.body;
   try {

@@ -8,6 +8,7 @@ const {
   getNOSList,
   assignNOStoQPS,
   assignedNOS,
+  unassignNOStoQPS,
 } = require("../controllers/ssc_controller");
 const router = Router();
 
@@ -19,6 +20,7 @@ router.post("/getAllQPS", getAllQPS);
 router.post("/getNOSList", getNOSList);
 router.post("/assignNOStoQPS", assignNOStoQPS);
 router.post("/assignedNOS", assignedNOS);
+router.post("/unassignNOStoQPS", unassignNOStoQPS);
 
 // router.post("/signup", signupUser); // Route for user signup
 // router.post("/signin/:role", signinUser); // Route for user sign in with role parameter
