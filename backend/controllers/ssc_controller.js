@@ -97,6 +97,56 @@ module.exports.assignedNOS = async (req, res) => {
   }
 };
 
+module.exports.NOSPage = async (req, res) => {
+  //send the json response which contains the data of assigned nos from total nos list and remaining nos in another field
+  const { SSC, QPS } = req.body;
+  console.log("SSC : ", SSC);
+  console.log("QPS : ", QPS);
+  try {
+    const sscref = await firestore
+      .collection("SSC")
+      .doc(SSC)
+      .collection("QPS")
+      .doc(QPS)
+      .get();
+
+    const nosArray = sscref.data().NOS_array;
+    console.log("NOS_Array : ", nosArray);
+
+    const sscDoc = await firestore.collection("SSC").doc(SSC).get();
+    const nosDocs = await sscDoc.ref.collection("NOS").get();
+    let nosList = [];
+
+    nosDocs.forEach((doc) => {
+      const docData = doc.data();
+      const nosObject = {
+        code: doc.id,
+        name: docData.NOS_name,
+      };
+      nosList.push(nosObject);
+    });
+    console.log("NOS LIST: ", nosList);
+    //assigned NOS
+    const assignedNos = nosList.filter((nos) => {
+      return nosArray.includes(nos.code);
+    });
+    console.log("ASSIGNED NOS: ", assignedNos);
+    //unassigned NOS
+    const UnAssignedNOSList = nosList.filter((nos) => {
+      return !nosArray.includes(nos.code);
+    });
+    console.log("UnAssigned NOS : ", UnAssignedNOSList);
+
+    const response = {
+      AssignedNOS: assignedNos,
+      UnAssignedNOSList: UnAssignedNOSList,
+    };
+    res.status(200).json(response); // Sending the array of objects as JSON
+  } catch (error) {
+    console.error("Error getting NOS:", error);
+    res.status(500).send("An error occurred while getting NOS.");
+  }
+};
 module.exports.assignNOStoQPS = async (req, res) => {
   const { SSC, QPS, NOS } = req.body;
   console.log("SSC: ", SSC);
