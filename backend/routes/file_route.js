@@ -12,6 +12,7 @@ const {
   uploadQuestions,
   generateQP,
   addQP,
+  getQuestionsGroupCount,
 } = require("../controllers/file_controller");
 
 // // Middleware to verify token
@@ -43,5 +44,6 @@ router.post("/createBatch", upload.single("file"), createBatch);
 router.post("/uploadQuestions", upload.single("file"), uploadQuestions);
 router.post("/generateQP", generateQP);
 router.post("/addQP", addQP);
+router.post("/getQuestionsGroupCount", getQuestionsGroupCount);
 
 module.exports = router;

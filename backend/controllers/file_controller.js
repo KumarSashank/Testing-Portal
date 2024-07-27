@@ -478,6 +478,23 @@ module.exports.addQP = async (req, res) => {
   }
 };
 
+module.exports.getQuestionsGroupCount = async (req, res) => {
+  try {
+    const { SSC } = req.body;
+    console.log("SSC : ", SSC);
+
+    const questionsRef = await firestore.collection("SSC").doc(SSC).get();
+    const data = questionsRef.data();
+    const groupedData = data.groupedData;
+    console.log(data);
+    // const questionsGroupCount = questionsRef.data().groupedData;
+    res.status(200).json(groupedData);
+  } catch (error) {
+    console.error("Error getting questions count:", error);
+    res.status(500).send("Internal Server Error");
+  }
+};
+
 async function generateQuestionPaper(questionsPattern) {
   let questionPaper = [];
 
