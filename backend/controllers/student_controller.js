@@ -354,8 +354,11 @@ module.exports.processResult2 = async (req, res) => {
       .collectionGroup("QPS")
       .where("QPS_id", "==", QPS)
       .get();
+
+    //get the snapshot and data
+    console.log("NOSList:", NOSList.docs[0].data());
     //get the NOS_Array field value from the document
-    const NOS_Array = NOSList.docs[0].data().NOS_Array;
+    const NOS_Array = NOSList.docs[0].data().NOS_array;
     console.log("NOS_Array:", NOS_Array);
 
     //create the key and value for that NOS_Array, where the values of array are as Keys and values are 0
