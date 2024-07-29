@@ -45,44 +45,46 @@ module.exports.studentLogin = async (req, res) => {
         }
       );
 
+      const batchRef = await firestore.collection("Batches").doc(batchID).get();
+      const batchData = batchRef.data();
+      console.log("Batch Data: ", batchData);
+
       // Fetch the batch document from Firestore
-      const batchRef = await firestore
-        .collection("Batches")
-        .doc(batchID)
+      const studentRef = await batchRef.ref
         .collection("students")
         .doc(studentID)
         .get();
 
-      if (!batchRef.exists) {
+      if (!studentRef.exists) {
         return res.status(404).json({ error: "Student not found" });
       }
 
-      console.log(batchRef.data());
+      console.log(studentRef.data());
 
       //change string to integer
       const passCheck = parseInt(password, 10);
-      if (passCheck !== batchRef.data().DOB) {
+      if (passCheck !== studentRef.data().DOB) {
         return res.status(401).json({ error: "Invalid password" });
       }
 
       //check whether student is already submitted the test
-      if (batchRef.data().submitted) {
+      if (studentRef.data().submitted) {
         return res.status(400).json({ error: "Test already submitted" });
       }
 
       //count the student login and store in db
-      const count = batchRef.data().count;
+      const count = studentRef.data().count;
       //if count variable is not there, add count variable with 1
       if (!count) {
-        await batchRef.ref.update({ count: 1 });
+        await studentRef.ref.update({ count: 1 });
       }
       //if count variable is there, update the count variable with 1
       else {
-        await batchRef.ref.update({ count: count + 1 });
+        await studentRef.ref.update({ count: count + 1 });
       }
       console.log("count", count);
       //fetch student details
-      const studentDetails = batchRef.data();
+      const studentDetails = studentRef.data();
 
       //fetching the job role which is QPS name by collection group of QPS
       const jobRoleRef = await firestore
@@ -99,11 +101,16 @@ module.exports.studentLogin = async (req, res) => {
         message: "Login successful",
         token: token,
         batchID: batchID,
+        batchname: batchData.batchName,
+        assessmentStartDate: batchData.assessmentStartDate,
+        endTime: batchData.endTime,
+        SSC: batchData.SSC,
+        startTime: batchData.startTime,
         qps: qps,
         studentNumber: studentNumber,
         QPno: qpNum,
         jobRole: jobRole,
-        studentDetails,
+        studentName: studentDetails.Name,
       });
     } else {
       console.error("Invalid student ID format");
@@ -115,6 +122,27 @@ module.exports.studentLogin = async (req, res) => {
   }
 };
 
+module.exports.getExamDetails = async (req, res) => {
+  const { batchID } = req.body;
+  try {
+    const batchRef = await firestore.collection("Batches").doc(batchID).get();
+    if (!batchRef.exists) {
+      return res.status(404).json({ error: "Batch not found" });
+    }
+    const qpNum = batchRef.data().qpNo;
+    const QPS = batchRef.data().QPS;
+    const cutoff = batchRef.data().cutoff;
+
+    return res.status(200).json({
+      qpNum,
+      QPS,
+      cutoff,
+    });
+  } catch (error) {
+    console.error("Error accessing Firestore:", error);
+    return res.status(500).json({ error: "Internal server error" });
+  }
+};
 //retrieving the questions from the database
 module.exports.getQuestionPaper = async (req, res) => {
   const { qps, QPno } = req.body;

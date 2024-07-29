@@ -284,6 +284,7 @@ module.exports.createBatch = async (req, res) => {
     } = req.body;
 
     const batchdata = {
+      SSC,
       batchName,
       batchSize,
       project,
