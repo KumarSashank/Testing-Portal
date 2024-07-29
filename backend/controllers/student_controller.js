@@ -13,6 +13,8 @@ const firestore = db;
 
 module.exports.studentLogin = async (req, res) => {
   const { studentID, password } = req.body;
+  console.log("Student ID:", studentID);
+  console.log("password : ", password);
 
   try {
     // Extracting parts from the student ID
@@ -146,6 +148,8 @@ module.exports.getExamDetails = async (req, res) => {
 //retrieving the questions from the database
 module.exports.getQuestionPaper = async (req, res) => {
   const { qps, QPno } = req.body;
+  console.log("QPS : ", qps);
+  console.log("QPno : ", QPno);
   try {
     const questionsRef = await firestore
       .collection("question_papers")
@@ -329,6 +333,7 @@ module.exports.processResult2 = async (req, res) => {
       answersAndMarks[doc.id] = {
         answer: questionData.ANS,
         marks: questionData.Marks,
+        NOS: questionData.NOS,
       };
     });
 
@@ -344,9 +349,28 @@ module.exports.processResult2 = async (req, res) => {
       .collection("Results")
       .get();
 
+    //getting the NOS list from QPS by collection group
+    const NOSList = await firestore
+      .collectionGroup("QPS")
+      .where("QPS_id", "==", QPS)
+      .get();
+    //get the NOS_Array field value from the document
+    const NOS_Array = NOSList.docs[0].data().NOS_Array;
+    console.log("NOS_Array:", NOS_Array);
+
+    //create the key and value for that NOS_Array, where the values of array are as Keys and values are 0
+    let NOS_Marks = {};
+    NOS_Array.forEach((NOS) => {
+      NOS_Marks[NOS] = 0;
+    });
+
     // Process results for each student
     for (const studentDoc of studentsSnapshot.docs) {
       let totalMarks = 0;
+      //reset the NOS_Marks
+      NOS_Array.forEach((NOS) => {
+        NOS_Marks[NOS] = 0;
+      });
       const optionsSelected = studentDoc.data().options_selected;
 
       // Calculate total marks based on the student's selected options
@@ -361,6 +385,9 @@ module.exports.processResult2 = async (req, res) => {
           ) {
             correct = true;
             totalMarks += answersAndMarks[questionID].marks;
+            //increment the NOS_Marks
+            NOS_Marks[answersAndMarks[questionID].NOS] +=
+              answersAndMarks[questionID].marks;
           }
         }
         console.log(
@@ -385,11 +412,13 @@ module.exports.processResult2 = async (req, res) => {
       await studentDoc.ref.update({
         totalMarks: totalMarks,
         pass: pass,
+        NOS_Marks: NOS_Marks,
       });
 
       const result = {
         totalMarks: totalMarks,
         pass: pass,
+        NOS_Marks: NOS_Marks,
       };
 
       // Store the total marks for the current student
@@ -441,6 +470,8 @@ module.exports.studentImgUpload = async (req, res) => {
     }
 
     const { studentid, batchID } = req.body;
+    console.log("Student ID : ", studentid);
+    console.log("Batch ID : ", batchID);
 
     //calling uploadquestionpapers function
     const responseJson = await uploadFileToStorage(file, batchID, studentid);
