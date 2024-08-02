@@ -100,3 +100,26 @@ module.exports.getBatchList = async (req, res) => {
     res.status(500).send("Internal Server Error");
   }
 };
+
+module.exports.getStudentCredentials = async (req, res) => {
+  const { batchId } = req.body;
+  try {
+    const batchRef = firestore
+      .collection("Batches")
+      .doc(batchId)
+      .collection("students")
+      .get();
+    const data = await batchRef;
+
+    //get the documents data in object array
+    let batchData = [];
+    data.forEach((doc) => {
+      //push the doc id and DOB from doc data
+      batchData.push({ ID: doc.id, DOB: doc.data().DOB });
+    });
+    return res.status(200).json(batchData);
+  } catch (e) {
+    console.log(e);
+    res.status(500).send("Internal Server Error");
+  }
+};

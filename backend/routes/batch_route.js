@@ -5,6 +5,7 @@ const {
   assignQPtoBatch,
   getBatchList,
   getBatches,
+  getStudentCredentials,
 } = require("../controllers/batch_controller");
 const router = Router();
 
@@ -14,6 +15,7 @@ router.post("/getQPlist", getQPlist);
 router.post("/assignQPtoBatch", assignQPtoBatch);
 router.post("/getBatchList", getBatchList);
 router.post("/getBatches", getBatches);
+router.post("/getStudentCredentials", getStudentCredentials);
 
 // router.post("/signup", signupUser); // Route for user signup
 // router.post("/signin/:role", signinUser); // Route for user sign in with role parameter
