@@ -449,11 +449,12 @@ module.exports.getResults = async (req, res) => {
 
     const resultsData = [];
     resultsRef.forEach((doc) => {
-      const { totalMarks, pass } = doc.data();
+      const { totalMarks, pass, NOS_Marks } = doc.data();
       resultsData.push({
         studentID: doc.id,
         totalMarks,
         pass,
+        NOS_Marks,
       });
     });
 
