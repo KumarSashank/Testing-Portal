@@ -9,6 +9,7 @@ const {
   processResult2,
   getResults,
   studentImgUpload,
+  getDetailResult,
 } = require("../controllers/student_controller");
 const router = Router();
 
@@ -20,6 +21,7 @@ router.post("/processResult", processResult);
 router.post("/processResult2", processResult2);
 router.post("/getResults", getResults);
 router.post("/studentImgUpload", upload.single("file"), studentImgUpload);
+router.post("/getDetailResult", getDetailResult);
 
 router.get("/hello", (req, res) => {
   res.send("Hello, World!");

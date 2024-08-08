@@ -465,6 +465,117 @@ module.exports.getResults = async (req, res) => {
   }
 };
 
+module.exports.getDetailResult = async (req, res) => {
+  const { studentID } = req.body;
+  console.log("Student ID : ", studentID);
+
+  const matches = studentID.match(/^([A-Z]+\d+)([A-Z]+)(\d+)$/);
+
+  if (matches) {
+    const [_, batchID, qps, studentNumber] = matches;
+
+    try {
+      const resultRef = await firestore
+        .collection("Batches")
+        .doc(batchID)
+        .collection("Results")
+        .doc(studentID)
+        .get();
+      if (!resultRef.exists) {
+        return res.status(404).json({ error: "Result not found" });
+      }
+
+      const resultData = resultRef.data();
+      console.log(resultData);
+
+      const option_selected = resultData.options_selected;
+      console.log(option_selected);
+
+      //fetching student basic details
+      const studentRef = await firestore
+        .collection("Batches")
+        .doc(batchID)
+        .collection("students")
+        .doc(studentID)
+        .get();
+      const studentData = studentRef.data();
+      console.log(studentData);
+
+      //fetch the questions from QP
+
+      //Fetch the QP num from batch
+      const batchRef = await firestore.collection("Batches").doc(batchID).get();
+      const qpNum = batchRef.data().qpNo;
+      console.log("Question Paper no : ", qpNum);
+
+      //now fetch the questions
+      const questionsRef = await firestore
+        .collection("question_papers")
+        .doc(qps)
+        .collection("papers")
+        .doc(qpNum.toString())
+        .collection("questions")
+        .get();
+      //get the data in an object array
+      const questionsData = [];
+      questionsRef.forEach((doc) => {
+        const {
+          ANS,
+          Option1,
+          Option2,
+          Option3,
+          Option4,
+          QuestionTypeID,
+          "s.no": sNo,
+          PCIDsWithMarks,
+          Question,
+          Marks,
+          QuestionLevelID,
+        } = doc.data();
+
+        const selectedOption = option_selected[sNo];
+        questionsData.push({
+          selectedOption,
+          ANS,
+          Option1,
+          Option2,
+          Option3,
+          Option4,
+          QuestionTypeID,
+          "s.no": sNo,
+          PCIDsWithMarks,
+          Question,
+          Marks,
+          QuestionLevelID,
+        });
+      });
+
+      //add another field selected option in questionsData
+      questionsData.forEach((question) => {
+        const questionID = question["s.no"];
+        if (option_selected.hasOwnProperty(questionID)) {
+          question.selectedOption = option_selected[questionID];
+        }
+      });
+
+      console.log(questionsData);
+
+      const studentDetails = {
+        result: resultData.pass,
+        totalMarks: resultData.totalMarks,
+        studentDetails: studentData,
+        questions: questionsData,
+      };
+
+      return res.status(200).json(studentDetails);
+    } catch (error) {
+      console.error("Error accessing Firestore:", error);
+      return res.status(500).json({ error: "Internal server error" });
+    }
+  } else {
+    return res.status(400).json({ error: "Invalid student ID format" });
+  }
+};
 module.exports.studentImgUpload = async (req, res) => {
   try {
     const file = req.file;
