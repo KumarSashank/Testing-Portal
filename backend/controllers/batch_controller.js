@@ -115,7 +115,11 @@ module.exports.getStudentCredentials = async (req, res) => {
     let batchData = [];
     data.forEach((doc) => {
       //push the doc id and DOB from doc data
-      batchData.push({ ID: doc.id, DOB: doc.data().DOB });
+      batchData.push({
+        Name: doc.data().Name,
+        ID: doc.id,
+        DOB: doc.data().DOB,
+      });
     });
     return res.status(200).json(batchData);
   } catch (e) {
