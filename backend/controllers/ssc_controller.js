@@ -209,6 +209,7 @@ module.exports.unassignNOStoQPS = async (req, res) => {
 
 module.exports.getSSC = async (req, res) => {
   const { SSC_code } = req.body;
+  console.log("SSC_code: ", SSC_code);
   try {
     const sscDoc = await firestore.collection("SSC").doc(SSC_code).get();
     res.send(sscDoc.data());
@@ -271,5 +272,46 @@ module.exports.getAllQPS = async (req, res) => {
   } catch (error) {
     console.error("Error getting documents", error);
     return res.status(500).send(error.toString());
+  }
+};
+
+module.exports.SSCpage = async (req, res) => {
+  console.log("initiated");
+  try {
+    const sscDocs = await firestore.collection("SSC").get();
+    let sscArray = [];
+
+    sscDocs.forEach((doc) => {
+      const docData = doc.data();
+      const sscObject = {
+        code: doc.id,
+        name: docData.Skill_council_name,
+        username: docData.username,
+        password: docData.password,
+      };
+      sscArray.push(sscObject);
+    });
+
+    res.status(200).json(sscArray); // Sending the array of objects as JSON
+  } catch (e) {
+    console.log("Error getting SSC:", e);
+    res.status(500).send("An error occurred while getting SSC.");
+  }
+};
+
+module.exports.editSSClogins = async (req, res) => {
+  const { SSC_code, username, password } = req.body;
+  console.log("SSC_code: ", SSC_code);
+  console.log("username: ", username);
+  console.log("password : ", password);
+  try {
+    const sscDoc = await firestore.collection("SSC").doc(SSC_code).update({
+      username: username,
+      password: password,
+    });
+    res.send("SSC logins updated successfully!");
+  } catch (error) {
+    console.error("Error updating SSC logins:", error);
+    res.status(500).send("An error occurred while updating SSC logins.");
   }
 };
