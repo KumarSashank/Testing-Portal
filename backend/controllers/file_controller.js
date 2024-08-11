@@ -496,6 +496,24 @@ module.exports.getQuestionsGroupCount = async (req, res) => {
   }
 };
 
+module.exports.getQuestionBank = async (req, res) => {
+  try {
+    const { SSC } = req.body;
+    const questionsRef = await firestore
+      .collection("Questions")
+      .where("SSC", "==", SSC)
+      .get();
+    const questions = [];
+    questionsRef.forEach((doc) => {
+      questions.push(doc.data());
+    });
+    res.status(200).json(questions);
+  } catch (error) {
+    console.error("Error getting questions:", error);
+    res.status(500).send("Internal Server Error");
+  }
+};
+
 async function generateQuestionPaper(questionsPattern) {
   let questionPaper = [];
 
