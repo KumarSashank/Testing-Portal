@@ -514,6 +514,56 @@ module.exports.getQuestionBank = async (req, res) => {
   }
 };
 
+module.exports.editQuestionQBank = async (req, res) => {
+  //get the index number and edit the question and option, and can upload images for question ans options
+  const { index, data } = req.body;
+  console.log("index : ", index);
+  console.log("data : ", data);
+  try {
+    const questionsRef = firestore.collection("Questions");
+    const questionRef = questionsRef.doc(index.toString());
+    //update question and options and can add other fields of image links individually
+    await questionRef.update({
+      Question: data.Question,
+      Option1: data.Option1,
+      Option2: data.Option2,
+      Option3: data.Option3,
+      Option4: data.Option4,
+      ANS: data.ANS,
+      question_img: data.question_img,
+      option1_img: data.option1_img,
+      option2_img: data.option2_img,
+      option3_img: data.option3_img,
+      option4_img: data.option4_img,
+    });
+    res.status(200).send("Question updated successfully");
+  } catch (error) {
+    console.error("Error updating question:", error);
+    res.status(500).send("Internal Server Error");
+  }
+};
+
+//use to upload images in edit section of a question
+module.exports.uploadQuestionImage = async (req, res) => {
+  try {
+    const file = req.file;
+    if (!file) {
+      return res.status(400).send("No file uploaded.");
+    }
+
+    //unique filename generator with time and data and .png
+    const filename = new Date().getTime() + ".png";
+
+    const url = await uploadFileToStorage(file, "questions_images", filename);
+    console.log("url : ", url);
+
+    return res.status(200).json({ url: url });
+  } catch (error) {
+    console.error("Error uploading file:", error);
+    res.status(500).send("Internal Server Error");
+  }
+};
+
 async function generateQuestionPaper(questionsPattern) {
   let questionPaper = [];
 
