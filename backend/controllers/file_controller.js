@@ -543,6 +543,37 @@ module.exports.editQuestionQBank = async (req, res) => {
   }
 };
 
+module.exports.editQuestionQP = async (req, res) => {
+  try {
+    const { QPS, qpNo, Qnum, data } = req.body;
+    const qpsRef = firestore.collection("question_papers").doc(QPS);
+    const papersRef = qpsRef.collection("papers").doc(qpNo.toString());
+    const questionsRef = papersRef.collection("questions");
+    const questionRef = questionsRef.doc(Qnum.toString());
+    await questionRef.update({
+      Question: data.Question,
+      Option1: data.Option1,
+      Option2: data.Option2,
+      Option3: data.Option3,
+      Option4: data.Option4,
+      ANS: data.ANS,
+      question_img: data.question_img,
+      option1_img: data.option1_img,
+      option2_img: data.option2_img,
+      option3_img: data.option3_img,
+      option4_img: data.option4_img,
+    });
+
+    //send the response Question num updated
+    return res
+      .status(200)
+      .json({ message: "Question Updated Successfully", Question_num: Qnum });
+  } catch (error) {
+    console.error("Error updating question paper:", error);
+    res.status(500).send("Internal Server Error");
+  }
+};
+
 //use to upload images in edit section of a question
 module.exports.uploadQuestionImage = async (req, res) => {
   try {
