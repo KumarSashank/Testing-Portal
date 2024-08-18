@@ -17,6 +17,7 @@ const {
   uploadQuestionImage,
   editQuestionQBank,
   editQuestionQP,
+  getQuestionPaperList,
 } = require("../controllers/file_controller");
 
 // // Middleware to verify token
@@ -53,5 +54,6 @@ router.post("/getQuestionBank", getQuestionBank);
 router.post("/uploadQuestionImage", upload.single("file"), uploadQuestionImage);
 router.post("/editQuestionQBank", editQuestionQBank);
 router.post("/editQuestionQP", editQuestionQP);
+router.post("/getQuestionPaperList", getQuestionPaperList);
 
 module.exports = router;

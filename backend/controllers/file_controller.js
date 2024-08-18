@@ -574,6 +574,27 @@ module.exports.editQuestionQP = async (req, res) => {
   }
 };
 
+module.exports.getQuestionPaperList = async (req, res) => {
+  try {
+    const { SSC, QPS } = req.body;
+    const qpsRef = firestore.collection("question_papers").doc(QPS);
+    const papersRef = qpsRef.collection("papers");
+    const papers = [];
+    const snapshot = await papersRef.get();
+    snapshot.forEach((doc) => {
+      //add id and doc.data in an object
+      let obj = {};
+      obj.id = doc.id;
+      obj.data = doc.data();
+      papers.push(obj);
+    });
+    return res.status(200).json(papers);
+  } catch (error) {
+    console.error("Error getting question paper list:", error);
+    res.status(500).send("Internal Server Error");
+  }
+};
+
 //use to upload images in edit section of a question
 module.exports.uploadQuestionImage = async (req, res) => {
   try {
