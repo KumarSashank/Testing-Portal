@@ -315,3 +315,29 @@ module.exports.editSSClogins = async (req, res) => {
     res.status(500).send("An error occurred while updating SSC logins.");
   }
 };
+
+module.exports.dashboard = async (req, res) => {
+  try {
+    const SSC = await firestore.collection("SSC").get();
+    //total count of the documents in SSC
+    const totalSSC = SSC.size;
+    console.log("SSC Count : ", totalSSC);
+    //total count of Batches
+    const batch = await firestore.collection("metaData").doc("batches").get();
+    const totalBatches = batch.data().LastBatchNum;
+
+    console.log("Batch Count : ", totalBatches);
+
+    //write a query for collection group to get students count
+    const studentcollectionRef = db.collectionGroup("students");
+    const studentsnapshot = await studentcollectionRef.count().get();
+    const studentCount = studentsnapshot.data().count;
+    console.log("Student Count : ", studentCount);
+
+    //send the response
+    res.status(200).json({ totalSSC, totalBatches, studentCount });
+  } catch (e) {
+    console.log("Error in dashboard", e);
+    res.status(500).send("An error occurred while getting dashboard data.");
+  }
+};

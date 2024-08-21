@@ -12,6 +12,7 @@ const {
   unassignNOStoQPS,
   SSCpage,
   editSSClogins,
+  dashboard,
 } = require("../controllers/ssc_controller");
 const router = Router();
 
@@ -27,6 +28,7 @@ router.post("/unassignNOStoQPS", unassignNOStoQPS);
 router.post("/NOSPage", NOSPage);
 router.post("/SSCpage", SSCpage);
 router.post("/editSSClogins", editSSClogins);
+router.post("/dashboard", dashboard);
 
 // router.post("/signup", signupUser); // Route for user signup
 // router.post("/signin/:role", signinUser); // Route for user sign in with role parameter
