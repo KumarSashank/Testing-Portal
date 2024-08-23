@@ -103,6 +103,7 @@ module.exports.getBatchList = async (req, res) => {
 
 module.exports.getStudentCredentials = async (req, res) => {
   const { batchId } = req.body;
+  console.log("Batch id : ", batchId);
   try {
     const batchRef = firestore
       .collection("Batches")
