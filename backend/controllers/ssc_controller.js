@@ -113,8 +113,14 @@ module.exports.NOSPage = async (req, res) => {
       .doc(QPS)
       .get();
 
-    const nosArray = sscref.data().NOS_array;
-    console.log("NOS_Array : ", nosArray);
+    let noNOSassigned = false;
+    try {
+      const nosArray = sscref.data().NOS_array;
+      console.log("NOS_Array : ", nosArray);
+    } catch (e) {
+      console.log("There is no NOS assigned to this QP");
+      noNOSassigned = true;
+    }
 
     const sscDoc = await firestore.collection("SSC").doc(SSC).get();
     const nosDocs = await sscDoc.ref.collection("NOS").get();
@@ -129,21 +135,30 @@ module.exports.NOSPage = async (req, res) => {
       nosList.push(nosObject);
     });
     console.log("NOS LIST: ", nosList);
-    //assigned NOS
-    const assignedNos = nosList.filter((nos) => {
-      return nosArray.includes(nos.code);
-    });
-    console.log("ASSIGNED NOS: ", assignedNos);
-    //unassigned NOS
-    const UnAssignedNOSList = nosList.filter((nos) => {
-      return !nosArray.includes(nos.code);
-    });
-    console.log("UnAssigned NOS : ", UnAssignedNOSList);
 
-    const response = {
-      AssignedNOS: assignedNos,
-      UnAssignedNOSList: UnAssignedNOSList,
-    };
+    let response = {};
+    if (noNOSassigned) {
+      //assigned NOS
+      const assignedNos = nosList.filter((nos) => {
+        return nosArray.includes(nos.code);
+      });
+      console.log("ASSIGNED NOS: ", assignedNos);
+      //unassigned NOS
+      const UnAssignedNOSList = nosList.filter((nos) => {
+        return !nosArray.includes(nos.code);
+      });
+      console.log("UnAssigned NOS : ", UnAssignedNOSList);
+
+      response = {
+        AssignedNOS: assignedNos,
+        UnAssignedNOSList: UnAssignedNOSList,
+      };
+    } else {
+      response = {
+        AssignedNOS: [],
+        UnAssignedNOSList: nosList,
+      };
+    }
     res.status(200).json(response); // Sending the array of objects as JSON
   } catch (error) {
     console.error("Error getting NOS:", error);
