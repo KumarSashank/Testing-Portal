@@ -114,12 +114,14 @@ module.exports.NOSPage = async (req, res) => {
       .get();
 
     let noNOSassigned = false;
-    try {
-      const nosArray = sscref.data().NOS_array;
-      console.log("NOS_Array : ", nosArray);
-    } catch (e) {
-      console.log("There is no NOS assigned to this QP");
+    let nosArray;
+    nosArray = sscref.data().NOS_array;
+    console.log("NOS_Array : ", nosArray);
+
+    //if nosArray is undefined, make noNOSassigned true
+    if (nosArray === undefined) {
       noNOSassigned = true;
+      console.log("There is no NOS assigned to this QP");
     }
 
     const sscDoc = await firestore.collection("SSC").doc(SSC).get();
@@ -137,7 +139,7 @@ module.exports.NOSPage = async (req, res) => {
     console.log("NOS LIST: ", nosList);
 
     let response = {};
-    if (noNOSassigned) {
+    if (!noNOSassigned) {
       //assigned NOS
       const assignedNos = nosList.filter((nos) => {
         return nosArray.includes(nos.code);
