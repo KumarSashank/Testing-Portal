@@ -8,6 +8,9 @@ const firestore = db;
 module.exports.createQPS = async (req, res) => {
   console.log("create QPS");
   const { SSC_code, QPS_name, QPS_id } = req.body;
+  console.log("SSC Code : ", SSC_code);
+  console.log("QPS Name : ", QPS_name);
+  console.log("QPS ID : ", QPS_id);
 
   try {
     // Find the document named with SSC_code
