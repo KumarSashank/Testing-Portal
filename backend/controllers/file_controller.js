@@ -380,14 +380,12 @@ module.exports.uploadQuestions = async (req, res) => {
 
     const { SSC } = req.body;
 
-    // Read the Excel file
     const workbook = readExcelFile(file);
     const data = extractDataFromWorkbook(workbook);
 
-    // Group questions based on NOS and Marks
+    // Assuming groupQuestions is necessary for your process, otherwise skip.
     const groupedData = groupQuestions(data);
 
-    // Update Firestore with grouped data
     await updateGroupedDataInFirestore(SSC, groupedData);
 
     const SSC_ref = await firestore.collection("SSC").doc(SSC).get();
@@ -395,49 +393,34 @@ module.exports.uploadQuestions = async (req, res) => {
       return res.status(400).send("Invalid SSC code");
     }
 
-    // Get the questions count from the metaData collection
     const questionBankRef = await firestore
       .collection("metaData")
       .doc("question_bank")
       .get();
-    var questions_count = questionBankRef.data().questions_count;
-    console.log(questions_count);
+    let questions_count = questionBankRef.data().questions_count;
 
     const questions_ref = firestore.collection("Questions");
+    const batch = firestore.batch();
 
-    // NOS collection name
-    const nos_questions = "questions_" + SSC;
-
-    // Loop through the extracted data
-    for (const question of data) {
+    data.forEach((question) => {
       questions_count++;
-      // Add the question to the 'questions' collection with a custom document ID
-      // Add the question_count to the question object
       const questionWithCount = {
         ...question,
         index: questions_count,
         SSC: SSC,
       };
+      const docRef = questions_ref.doc(questions_count.toString());
+      batch.set(docRef, questionWithCount);
+    });
 
-      // Add the question to the 'questions' collection with a custom document ID and include the question_count
-      await questions_ref
-        .doc(questions_count.toString())
-        .set(questionWithCount);
+    await batch.commit();
 
-      console.log(
-        `Question added to NOS ID ${question.NOS} with custom ID ${questions_count}`
-      );
-    }
-
-    // Update the questions_count in question_bank
     await firestore
       .collection("metaData")
       .doc("question_bank")
-      .update({ questions_count: questions_count });
+      .update({ questions_count });
 
-    // Delete the uploaded file after the process is completed
     await unlinkAsync(file.path);
-    console.log("Uploaded file deleted successfully.");
 
     return res.status(200).json({ message: "Questions uploaded successfully" });
   } catch (error) {
