@@ -431,8 +431,13 @@ module.exports.uploadQuestions = async (req, res) => {
 
 module.exports.generateQP = async (req, res) => {
   const { SSC, QPS, questions_pattern } = req.body;
+  console.log("SSC : ", SSC);
+  console.log("QPS : ", QPS);
+  console.log("questions_pattern : ", questions_pattern);
   try {
     const questionPaper = await generateQuestionPaper(questions_pattern);
+
+    console.log(questionPaper);
 
     // Upload the generated question paper to Firestore
     // await uploadQuestionPaperData2(QPS, SSC, questionPaper);
@@ -445,13 +450,14 @@ module.exports.generateQP = async (req, res) => {
 };
 
 module.exports.addQP = async (req, res) => {
-  const { SSC, QPS, questionPaper } = req.body;
+  const { SSC, QPS, questionPaper, cutoff } = req.body;
   try {
     // Upload the generated question paper to Firestore
     const QPS_paper_count = await uploadQuestionPaperData2(
       QPS,
       SSC,
-      questionPaper
+      questionPaper,
+      cutoff
     );
 
     //send the response that question paper created and its count
