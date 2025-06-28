@@ -163,6 +163,7 @@ module.exports.getsectors = async (req, res) => {
 
 module.exports.adminSignin = async (req, res) => {
   const { username, password } = req.body;
+  console.log(username,password);
 
   try {
     // Query Firestore for the "Admin" document in the "users" collection
