@@ -12,7 +12,7 @@ const firebase = require("firebase-admin");
 
 // var admin = require("firebase-admin");
 
-var serviceAccount = require("./portaldev-14a99-firebase-adminsdk-a31b8-04e77edf89.json");
+var serviceAccount = require("./portaldev-14a99-firebase-adminsdk-a31b8-23042b117d.json");
 
 firebase.initializeApp({
   credential: firebase.credential.cert(serviceAccount),
