@@ -1,18 +1,18 @@
 const firebase = require("firebase-admin");
 
-// const firebaseConfig = {
-//   apiKey: "AIzaSyBzbhDPjGN4eUhaW-edVBYKdMtRzHPgbXw",
-//   authDomain: "portaldev-14a99.firebaseapp.com",
-//   projectId: "portaldev-14a99",
-//   storageBucket: "portaldev-14a99.appspot.com",
-//   messagingSenderId: "856895878058",
-//   appId: "1:856895878058:web:170bcbf42dcd3670fe71d3",
-//   measurementId: "G-EQXC0STZ7V",
-// };
+let serviceAccount;
 
-// var admin = require("firebase-admin");
-
-var serviceAccount = require("./portaldev-14a99-firebase-adminsdk-a31b8-23042b117d.json");
+if (process.env.NODE_ENV === 'production') {
+  // Production: Use Base64 encoded service account from environment variable
+  const base64ServiceAccount = process.env.FIREBASE_SERVICE_ACCOUNT_BASE64;
+  if (!base64ServiceAccount) {
+    throw new Error('FIREBASE_SERVICE_ACCOUNT_BASE64 environment variable is required in production');
+  }
+  
+  // Decode Base64 to JSON
+  const serviceAccountJson = Buffer.from(base64ServiceAccount, 'base64').toString('utf8');
+  serviceAccount = JSON.parse(serviceAccountJson);
+} 
 
 firebase.initializeApp({
   credential: firebase.credential.cert(serviceAccount),
