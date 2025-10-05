@@ -47,5 +47,12 @@ app.use(ssc_route);
 app.use(training_centre_route);
 
 app.listen(PORT, () => {
-  console.log(`Listening on : ${PORT}`);
+  console.log(`🚀 Server is running!`);
+  console.log(`📍 Local:   http://localhost:${PORT}`);
+  console.log(`📍 Network: http://0.0.0.0:${PORT}`);
+  console.log(`\n📋 Available endpoints:`);
+  console.log(`   • Admin Sign-in: POST http://localhost:${PORT}/adminSignin`);
+  console.log(`   • Student Login: POST http://localhost:${PORT}/studentLogin`);
+  console.log(`   • Health Check:  GET  http://localhost:${PORT}/hello`);
+  console.log(`\n🔧 Environment: ${process.env.NODE_ENV || 'development'}`);
 });

@@ -20,19 +20,56 @@ if (isProduction) {
     throw new Error('FIREBASE_SERVICE_ACCOUNT_BASE64 environment variable is required in production');
   }
   
-  // Decode Base64 to JSON
-  const serviceAccountJson = Buffer.from(base64ServiceAccount, 'base64').toString('utf8');
-  serviceAccount = JSON.parse(serviceAccountJson);
-  console.log('✅ Successfully loaded service account from environment variable');
+  // Decode Base64 to JSON with error handling
+  try {
+    const serviceAccountJson = Buffer.from(base64ServiceAccount, 'base64').toString('utf8');
+    serviceAccount = JSON.parse(serviceAccountJson);
+  } catch (error) {
+    console.error('❌ Failed to decode Base64 service account:', error.message);
+    console.error('Base64 length:', base64ServiceAccount.length);
+    console.error('First 100 chars:', base64ServiceAccount.substring(0, 100));
+    throw new Error('Invalid Base64 service account format');
+  }
+  
+  // Debug: Check if all required fields are present
+  const requiredFields = ['type', 'project_id', 'private_key', 'client_email'];
+  const missingFields = requiredFields.filter(field => !serviceAccount[field]);
+  if (missingFields.length > 0) {
+    console.error('❌ Missing required fields in service account:', missingFields);
+    console.error('Service account keys:', Object.keys(serviceAccount));
+  } else {
+    console.log('✅ Successfully loaded service account from environment variable');
+    console.log('Service account:', serviceAccount);
+    console.log('Service account project_id:', serviceAccount.project_id);
+    console.log('Service account client_email:', serviceAccount.client_email);
+  }
 } else {
   // Development: Try to use environment variable first, then fallback to local file
   const base64ServiceAccount = process.env.FIREBASE_SERVICE_ACCOUNT_BASE64;
   
   if (base64ServiceAccount) {
     // Use environment variable if available
-    const serviceAccountJson = Buffer.from(base64ServiceAccount, 'base64').toString('utf8');
-    serviceAccount = JSON.parse(serviceAccountJson);
-    console.log('✅ Successfully loaded service account from environment variable (development)');
+    try {
+      const serviceAccountJson = Buffer.from(base64ServiceAccount, 'base64').toString('utf8');
+      serviceAccount = JSON.parse(serviceAccountJson);
+    } catch (error) {
+      console.error('❌ Failed to decode Base64 service account:', error.message);
+      console.error('Base64 length:', base64ServiceAccount.length);
+      console.error('First 100 chars:', base64ServiceAccount.substring(0, 100));
+      throw new Error('Invalid Base64 service account format');
+    }
+    
+    // Debug: Check if all required fields are present
+    const requiredFields = ['type', 'project_id', 'private_key', 'client_email'];
+    const missingFields = requiredFields.filter(field => !serviceAccount[field]);
+    if (missingFields.length > 0) {
+      console.error('❌ Missing required fields in service account:', missingFields);
+      console.error('Service account keys:', Object.keys(serviceAccount));
+    } else {
+      console.log('✅ Successfully loaded service account from environment variable (development)');
+      console.log('Service account project_id:', serviceAccount.project_id);
+      console.log('Service account client_email:', serviceAccount.client_email);
+    }
   } else {
     // Try local file as fallback
     try {
